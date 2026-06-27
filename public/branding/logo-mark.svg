@@ -1,0 +1,33 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LOGOS">
+  <defs>
+    <linearGradient id="mark-a" x1="6" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00D2FF"/>
+      <stop offset="0.35" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="mark-b" x1="4" y1="28" x2="36" y2="38" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="0.55" stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#9D50BB"/>
+    </linearGradient>
+    <linearGradient id="mark-c" x1="16" y1="4" x2="30" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67E8F9" stop-opacity="0.95"/>
+      <stop offset="0.5" stop-color="#818CF8" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#7C3AED" stop-opacity="0.5"/>
+    </linearGradient>
+    <filter id="mark-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="0.6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#mark-glow)">
+    <path d="M6 4h11v32H6V4z" fill="url(#mark-a)"/>
+    <path d="M6 27h28v9H6v-9z" fill="url(#mark-b)"/>
+    <path d="M17 4h5.5L31 27H17V4z" fill="url(#mark-c)"/>
+    <path d="M6 4h11v1.25H6V4z" fill="#A5F3FC" fill-opacity="0.6"/>
+    <path d="M6 27h28v1H6v-1z" fill="#93C5FD" fill-opacity="0.4"/>
+  </g>
+</svg>

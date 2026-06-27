@@ -1,0 +1,257 @@
+{
+  "metadata": {
+    "title": "LOGOS",
+    "description": "Desenvolvemos sites, sistemas e aplicações sob medida com foco em performance, design e escalabilidade.",
+    "keywords": "LOGOS,agência de desenvolvimento,desenvolvimento web,Next.js,React,soluções digitais,performance,SEO,acessibilidade"
+  },
+  "nav": {
+    "services": "Serviços",
+    "technologies": "Tecnologias",
+    "cases": "Cases",
+    "faq": "FAQ",
+    "scheduleCall": "Agendar uma conversa",
+    "viewCases": "Ver cases",
+    "homeAriaLabel": "LOGOS — Página inicial",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "mobileMenuTitle": "Menu de navegação",
+    "mainNav": "Principal",
+    "mobileNav": "Mobile"
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "current": "Idioma atual: {language}",
+    "selectLanguage": "Selecionar idioma"
+  },
+  "branding": {
+    "name": "LOGOS | Agência de Desenvolvimento",
+    "shortName": "LOGOS",
+    "tagline": "Agência de Desenvolvimento",
+    "logoAlt": "LOGOS Agência de Desenvolvimento — Logo oficial"
+  },
+  "skipLink": "Pular para o conteúdo",
+  "hero": {
+    "badge": "LOGOS",
+    "title": "A infraestrutura digital que transforma ideias em",
+    "titleHighlight": "produtos de alto impacto",
+    "description": "Desenvolvemos sites, sistemas e aplicações sob medida com foco em performance, design e escalabilidade. Construímos soluções digitais para empresas que desejam crescer com tecnologia.",
+    "ctaPrimary": "Agendar uma conversa",
+    "ctaSecondary": "Conhecer nossos serviços",
+    "stats": {
+      "projects": { "value": "50+", "label": "Projetos entregues" },
+      "response": { "value": "24h", "label": "Tempo de resposta" },
+      "uptime": { "value": "99.9%", "label": "Disponibilidade" }
+    },
+    "visual": {
+      "systemLive": "Sistema em produção",
+      "performanceRealtime": "Performance em tempo real",
+      "requests": "Requisições",
+      "latency": "Latência",
+      "availability": "Disponibilidade",
+      "nodes": "Nodes",
+      "deploy": "Deploy",
+      "deployActive": "Active"
+    }
+  },
+  "services": {
+    "badge": "Serviços",
+    "title": "Soluções completas para cada etapa do seu produto digital",
+    "description": "Da estratégia à entrega — unimos arquitetura, design e engenharia para construir plataformas que geram resultados mensuráveis.",
+    "items": {
+      "digitalArchitecture": {
+        "title": "Arquitetura Digital",
+        "description": "Sistemas escaláveis projetados para acompanhar o crescimento do seu negócio, sem comprometer performance nem estabilidade."
+      },
+      "interfaceDesign": {
+        "title": "Design de Interfaces",
+        "description": "Experiências visuais coesas e interfaces intuitivas que traduzem a identidade da sua marca em cada interação."
+      },
+      "softwareEngineering": {
+        "title": "Engenharia de Software",
+        "description": "Código robusto e interfaces de alta performance com React, Next.js e as melhores práticas do mercado."
+      },
+      "digitalProducts": {
+        "title": "Produtos Digitais",
+        "description": "Do conceito ao deploy — sites, plataformas e aplicações web completas, prontas para escalar."
+      },
+      "seoPerformance": {
+        "title": "SEO & Performance",
+        "description": "Otimização técnica para ranqueamento, Core Web Vitals e conversão — cada milissegundo conta."
+      },
+      "securityCompliance": {
+        "title": "Segurança & Compliance",
+        "description": "Boas práticas de segurança, acessibilidade e conformidade aplicadas em cada camada do produto."
+      }
+    }
+  },
+  "technologies": {
+    "badge": "Tecnologias",
+    "title": "Tecnologia de ponta para produtos que evoluem",
+    "description": "Stack moderna escolhida por performance, escalabilidade e manutenibilidade — para que seu software cresça sem retrabalho."
+  },
+  "cases": {
+    "badge": "Cases",
+    "title": "Resultados que comprovam nossa entrega",
+    "description": "Projetos reais com métricas reais. Veja como transformamos desafios complexos em vantagem competitiva para nossos clientes.",
+    "viewCaseAria": "Ver case: {title}",
+    "items": {
+      "fintech": {
+        "industry": "Fintech",
+        "title": "Plataforma de investimentos",
+        "description": "Redesign completo com dashboard em tempo real e onboarding fluido para mais de 200 mil usuários ativos.",
+        "metricLabel": "Conversão"
+      },
+      "saas": {
+        "industry": "SaaS",
+        "title": "Hub de automação B2B",
+        "description": "Arquitetura multi-tenant com painel administrativo proprietário e pipeline de deploy contínuo.",
+        "metricLabel": "Requisições/dia"
+      },
+      "healthtech": {
+        "industry": "Healthtech",
+        "title": "Portal de telemedicina",
+        "description": "Experiência acessível e segura com integração a prontuários eletrônicos e videochamada em tempo real.",
+        "metricLabel": "Disponibilidade"
+      }
+    }
+  },
+  "testimonials": {
+    "badge": "Depoimentos",
+    "title": "A confiança de quem lidera seus mercados",
+    "description": "Executivos e fundadores que escolheram a LOGOS para escalar seus produtos digitais.",
+    "items": {
+      "marina": {
+        "quote": "A LOGOS entregou uma plataforma que parece ter sido construída por uma equipe interna de 50 pessoas. A qualidade técnica e o cuidado com o design são incomparáveis.",
+        "author": "Marina Costa",
+        "role": "CTO",
+        "company": "Vertex Capital"
+      },
+      "rafael": {
+        "quote": "Nosso tempo de go-to-market caiu 60%. A parceria com a LOGOS elevou nosso padrão de entrega a outro nível.",
+        "author": "Rafael Mendes",
+        "role": "Head of Product",
+        "company": "Nexus Labs"
+      },
+      "ana": {
+        "quote": "Design impecável, código limpo e performance que nosso time de engenharia aprovou de primeira.",
+        "author": "Ana Beatriz Lima",
+        "role": "CEO",
+        "company": "Pulse Health"
+      }
+    }
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Perguntas frequentes",
+    "description": "Respostas objetivas para as dúvidas mais comuns antes de iniciarmos uma parceria.",
+    "items": {
+      "whatIsLogos": {
+        "question": "O que é a LOGOS?",
+        "answer": "Somos uma agência de desenvolvimento de software que transforma ideias em soluções digitais modernas, rápidas e escaláveis — unindo engenharia, design e performance em cada projeto."
+      },
+      "timeline": {
+        "question": "Quanto tempo leva um projeto típico?",
+        "answer": "Sites e landing pages premium levam de 2 a 4 semanas. Plataformas completas variam de 8 a 16 semanas, dependendo do escopo. Sempre entregamos MVPs incrementais para validar resultados desde o início."
+      },
+      "internalTeams": {
+        "question": "Vocês trabalham com equipes internas?",
+        "answer": "Sim. Atuamos como extensão do seu time — integrando com designers, PMs e engenheiros já existentes, ou liderando o projeto de ponta a ponta."
+      },
+      "postLaunch": {
+        "question": "Vocês oferecem suporte após o lançamento?",
+        "answer": "Sim. Oferecemos planos de manutenção, evolução contínua e suporte técnico para garantir que seu produto permaneça seguro, performático e alinhado às necessidades do negócio."
+      },
+      "investment": {
+        "question": "Qual o investimento para começar?",
+        "answer": "Projetos iniciam a partir de escopos definidos em uma fase de discovery. Agende uma conversa e montaremos uma proposta sob medida para o seu objetivo."
+      }
+    }
+  },
+  "contact": {
+    "title": "Vamos construir seu",
+    "titleHighlight": "próximo projeto",
+    "description": "Conte um pouco sobre sua empresa e seus objetivos. Nossa equipe analisará sua necessidade e entrará em contato em até 24 horas úteis.",
+    "formAriaLabel": "Formulário de contato",
+    "fields": {
+      "name": "Nome",
+      "namePlaceholder": "Seu nome completo",
+      "company": "Empresa",
+      "companyPlaceholder": "Nome da empresa",
+      "email": "E-mail",
+      "emailPlaceholder": "voce@empresa.com",
+      "whatsapp": "WhatsApp",
+      "whatsappPlaceholder": "(11) 99999-9999",
+      "projectType": "Tipo de projeto",
+      "investmentRange": "Faixa de investimento",
+      "message": "Mensagem",
+      "messagePlaceholder": "Conte sobre sua empresa, objetivos e prazos...",
+    "selectPlaceholder": "Selecione uma opção"
+    },
+    "projectTypes": {
+      "landingPage": "Landing Page",
+      "institutionalSite": "Site Institucional",
+      "ecommerce": "E-commerce",
+      "webSystem": "Sistema Web",
+      "application": "Aplicativo",
+      "other": "Outro"
+    },
+    "investmentRanges": {
+      "upTo5000": "Até R$5.000",
+      "5000To10000": "R$5.000–10.000",
+      "10000To20000": "R$10.000–20.000",
+      "above20000": "Acima de R$20.000"
+    },
+    "submit": "Agendar conversa",
+    "submitting": "Enviando…",
+    "toastValidationTitle": "Verifique o formulário",
+    "toastValidationDescription": "Alguns campos precisam de atenção antes do envio.",
+    "toastSuccessTitle": "Projeto enviado!",
+    "toastSuccessDescription": "Recebemos seu contato com sucesso.",
+    "toastErrorTitle": "Não foi possível enviar",
+    "toastErrorDescription": "Tente novamente em alguns instantes.",
+    "submitError": "Não foi possível enviar o formulário. Tente novamente.",
+    "success": {
+      "title": "Projeto recebido com sucesso!",
+      "description": "Em breve, um especialista da {brand} entrará em contato para dar continuidade ao seu projeto.",
+      "backToTop": "Voltar ao início",
+      "whatsapp": "Conversar no WhatsApp"
+    },
+    "whatsappMessage": "Olá!\n\nAcabei de enviar meu projeto pelo site da {brand}.\n\nGostaria de conversar."
+  },
+  "footer": {
+    "columns": {
+      "services": "Serviços",
+      "company": "Empresa",
+      "legal": "Legal"
+    },
+    "links": {
+      "services": "Serviços",
+      "technologies": "Tecnologias",
+      "cases": "Cases",
+      "faq": "FAQ",
+      "about": "Sobre nós",
+      "testimonials": "Depoimentos",
+      "contact": "Contato",
+      "privacy": "Privacidade",
+      "terms": "Termos",
+      "cookies": "Cookies"
+    },
+    "copyright": "© {year} {brand}. Todos os direitos reservados."
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "O recurso que você procura não existe ou foi movido. Volte para a página inicial do {brand}.",
+    "backHome": "Voltar ao início"
+  },
+  "validation": {
+    "nameMin": "O nome deve ter pelo menos 2 caracteres.",
+    "companyRequired": "Informe o nome da empresa.",
+    "emailInvalid": "Digite um e-mail válido.",
+    "whatsappRequired": "Informe seu WhatsApp.",
+    "whatsappInvalid": "Digite um número de WhatsApp válido.",
+    "projectTypeRequired": "Selecione o tipo de projeto.",
+    "investmentRangeRequired": "Selecione a faixa de investimento.",
+    "messageMin": "A mensagem deve ter pelo menos 10 caracteres.",
+    "messageMax": "A mensagem é muito longa."
+  }
+}

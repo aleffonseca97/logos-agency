@@ -1,26 +1,136 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "../styles/tokens.css";
+@import "../styles/themes/logos-default.css";
+@import "../styles/typography.css";
+@import "../styles/utilities.css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* ── Shadcn semantic colors ── */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* ── LOGOS brand colors (Tailwind: bg-brand-primary, text-brand-white…) ── */
+  --color-brand-primary: var(--logos-brand-primary);
+  --color-brand-secondary: var(--logos-brand-secondary);
+  --color-brand-accent: var(--logos-brand-accent);
+  --color-brand-background: var(--logos-brand-background);
+  --color-brand-surface: var(--logos-brand-surface);
+  --color-brand-white: var(--logos-brand-white);
+
+  /* ── LOGOS semantic colors ── */
+  --color-logos-bg: var(--logos-bg);
+  --color-logos-surface: var(--logos-surface);
+  --color-logos-text: var(--logos-text);
+  --color-logos-text-muted: var(--logos-text-muted);
+  --color-logos-border: var(--logos-border);
+
+  /* ── Typography ── */
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-heading);
+  --font-wordmark: var(--font-wordmark);
+  --font-mono: ui-monospace, monospace;
+
+  /* ── Radius (Shadcn + LOGOS) ── */
+  --radius-sm: var(--logos-radius-sm);
+  --radius-md: var(--logos-radius-md);
+  --radius-lg: var(--logos-radius-lg);
+  --radius-xl: var(--logos-radius-xl);
+  --radius-2xl: var(--logos-radius-2xl);
+  --radius-3xl: var(--logos-radius-3xl);
+  --radius-4xl: calc(var(--logos-radius-3xl) * 1.2);
+
+  /* ── Shadows ── */
+  --shadow-logos-xs: var(--logos-shadow-xs);
+  --shadow-logos-sm: var(--logos-shadow-sm);
+  --shadow-logos-md: var(--logos-shadow-md);
+  --shadow-logos-lg: var(--logos-shadow-lg);
+  --shadow-logos-xl: var(--logos-shadow-xl);
+  --shadow-logos-glow: var(--logos-shadow-glow);
+  --shadow-logos-glow-accent: var(--logos-shadow-glow-accent);
+
+  /* ── Blur ── */
+  --blur-logos-xs: var(--logos-blur-xs);
+  --blur-logos-sm: var(--logos-blur-sm);
+  --blur-logos-md: var(--logos-blur-md);
+  --blur-logos-lg: var(--logos-blur-lg);
+  --blur-logos-xl: var(--logos-blur-xl);
+
+  /* ── Breakpoints ── */
+  --breakpoint-xs: 475px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* ── Sidebar (Shadcn) ── */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* ── Charts (Shadcn) ── */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Light mode — CRM dashboard */
+:root.light,
+.light {
+  --logos-brand-background: #f8fafc;
+  --logos-brand-surface: #ffffff;
+  --logos-brand-white: #0f172a;
+  --logos-bg: #f1f5f9;
+  --logos-surface: #ffffff;
+  --logos-text: #0f172a;
+  --logos-text-muted: #64748b;
+  --logos-border: rgba(15, 23, 42, 0.1);
+  --logos-glass-bg: rgba(255, 255, 255, 0.8);
+  --logos-glass-border: rgba(15, 23, 42, 0.08);
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --border: rgba(15, 23, 42, 0.1);
 }

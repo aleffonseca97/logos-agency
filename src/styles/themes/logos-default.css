@@ -1,0 +1,126 @@
+/**
+ * Tema padrão LOGOS — troque data-theme ou sobrescreva --logos-brand-* para novos clientes.
+ * Cores sincronizadas com: src/design-system/themes/brand-colors.ts
+ */
+:root,
+[data-theme="logos-default"],
+.dark {
+  /* ── Brand (única camada editável por cliente) ── */
+  --logos-brand-primary: #2563eb;
+  --logos-brand-secondary: #1d4ed8;
+  --logos-brand-accent: #4f46e5;
+  --logos-brand-background: #0b0f19;
+  --logos-brand-surface: #111827;
+  --logos-brand-white: #f8fafc;
+
+  /* ── Semantic ── */
+  --logos-bg: var(--logos-brand-background);
+  --logos-surface: var(--logos-brand-surface);
+  --logos-text: var(--logos-brand-white);
+  --logos-text-muted: color-mix(
+    in srgb,
+    var(--logos-brand-white) 65%,
+    transparent
+  );
+  --logos-border: color-mix(in srgb, var(--logos-brand-white) 12%, transparent);
+  --logos-border-subtle: color-mix(
+    in srgb,
+    var(--logos-brand-white) 6%,
+    transparent
+  );
+  --logos-ring: var(--logos-brand-primary);
+
+  /* ── Shadows com cor da marca ── */
+  --logos-shadow-glow: 0 0 24px
+    color-mix(in srgb, var(--logos-brand-primary) 30%, transparent);
+  --logos-shadow-glow-accent: 0 0 32px
+    color-mix(in srgb, var(--logos-brand-accent) 35%, transparent);
+
+  /* ── Glassmorphism ── */
+  --logos-glass-bg: color-mix(
+    in srgb,
+    var(--logos-brand-surface) 70%,
+    transparent
+  );
+  --logos-glass-bg-strong: color-mix(
+    in srgb,
+    var(--logos-brand-surface) 85%,
+    transparent
+  );
+  --logos-glass-border: color-mix(
+    in srgb,
+    var(--logos-brand-white) 10%,
+    transparent
+  );
+  --logos-glass-blur: var(--logos-blur-lg);
+  --logos-glass-shadow: var(--logos-shadow-md);
+
+  /* ── Navbar floating pill ── */
+  --logos-navbar-bg: color-mix(
+    in srgb,
+    var(--logos-brand-surface) 75%,
+    transparent
+  );
+  --logos-navbar-border: color-mix(
+    in srgb,
+    var(--logos-brand-white) 12%,
+    transparent
+  );
+  --logos-navbar-blur: 12px;
+  --logos-navbar-shadow:
+    0 0 0 1px color-mix(in srgb, var(--logos-brand-white) 4%, transparent),
+    0 8px 32px color-mix(in srgb, #000000 35%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--logos-brand-white) 6%, transparent);
+
+  /* ── Shadcn/UI bridge ── */
+  --background: var(--logos-bg);
+  --foreground: var(--logos-text);
+  --card: var(--logos-surface);
+  --card-foreground: var(--logos-text);
+  --popover: var(--logos-surface);
+  --popover-foreground: var(--logos-text);
+  --primary: var(--logos-brand-primary);
+  --primary-foreground: var(--logos-brand-white);
+  --secondary: var(--logos-brand-secondary);
+  --secondary-foreground: var(--logos-brand-white);
+  --muted: color-mix(
+    in srgb,
+    var(--logos-brand-surface) 80%,
+    var(--logos-brand-white)
+  );
+  --muted-foreground: var(--logos-text-muted);
+  --accent: var(--logos-brand-accent);
+  --accent-foreground: var(--logos-brand-white);
+  --destructive: #ef4444;
+  --border: var(--logos-border);
+  --input: var(--logos-border-subtle);
+  --ring: var(--logos-ring);
+  --radius: var(--logos-radius-lg);
+
+  --sidebar: var(--logos-surface);
+  --sidebar-foreground: var(--logos-text);
+  --sidebar-primary: var(--logos-brand-primary);
+  --sidebar-primary-foreground: var(--logos-brand-white);
+  --sidebar-accent: color-mix(
+    in srgb,
+    var(--logos-brand-surface) 90%,
+    var(--logos-brand-white)
+  );
+  --sidebar-accent-foreground: var(--logos-text);
+  --sidebar-border: var(--logos-border);
+  --sidebar-ring: var(--logos-ring);
+
+  --chart-1: var(--logos-brand-primary);
+  --chart-2: var(--logos-brand-secondary);
+  --chart-3: var(--logos-brand-accent);
+  --chart-4: color-mix(
+    in srgb,
+    var(--logos-brand-primary) 60%,
+    var(--logos-brand-accent)
+  );
+  --chart-5: color-mix(
+    in srgb,
+    var(--logos-brand-secondary) 60%,
+    var(--logos-brand-white)
+  );
+}

@@ -1,0 +1,15 @@
+/**
+ * Template para novo cliente — copie este arquivo e renomeie.
+ *
+ * 1. Crie themes/nome-do-cliente.css com overrides abaixo
+ * 2. Registre em design-system/themes/nome-do-cliente.ts
+ * 3. Importe em globals.css e aplique data-theme no <html>
+ */
+[data-theme="client-name"] {
+  --logos-brand-primary: #2563eb;
+  --logos-brand-secondary: #1d4ed8;
+  --logos-brand-accent: #4f46e5;
+  --logos-brand-background: #0b0f19;
+  --logos-brand-surface: #111827;
+  --logos-brand-white: #f8fafc;
+}
