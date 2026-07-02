@@ -15,6 +15,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant = "primary",
       size = "md",
       fullWidth = false,
+      render,
+      nativeButton,
       ...props
     },
     ref,
@@ -28,6 +30,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           { variant, size, fullWidth },
           className,
         )}
+        render={render}
+        nativeButton={render != null ? (nativeButton ?? false) : nativeButton}
         {...props}
       />
     );

@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -19,17 +23,39 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@logos/*": ["./src/components/logos/*"],
-      "@ui/*": ["./src/components/ui/*"],
-      "@config/*": ["./src/config/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@providers/*": ["./src/providers/*"],
-      "@types/*": ["./src/types/*"],
-      "@features/*": ["./src/features/*"],
-      "@services/*": ["./src/services/*"],
-      "@actions/*": ["./src/actions/*"],
-      "@design-system/*": ["./src/design-system/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@logos/*": [
+        "./src/components/logos/*"
+      ],
+      "@ui/*": [
+        "./src/components/ui/*"
+      ],
+      "@config/*": [
+        "./src/config/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@providers/*": [
+        "./src/providers/*"
+      ],
+      "@types/*": [
+        "./src/types/*"
+      ],
+      "@features/*": [
+        "./src/features/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@actions/*": [
+        "./src/actions/*"
+      ],
+      "@design-system/*": [
+        "./src/design-system/*"
+      ]
     }
   },
   "include": [
@@ -40,5 +66,7 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

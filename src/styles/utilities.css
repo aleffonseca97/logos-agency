@@ -95,10 +95,12 @@
 @utility logos-text-gradient {
   background-image: linear-gradient(
     to right,
-    var(--brand-primary),
-    var(--brand-accent),
-    var(--brand-secondary)
+    var(--logos-brand-primary),
+    var(--logos-brand-accent),
+    var(--logos-brand-secondary)
   );
   background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
+  -webkit-text-fill-color: transparent;
 }
