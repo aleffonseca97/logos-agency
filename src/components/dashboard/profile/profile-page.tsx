@@ -6,7 +6,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { PageHeader } from "@/components/dashboard/shared/page-header";
 import { Button } from "@/components/logos/button";
 import { Input } from "@/components/logos/input";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/logos/toast";
 
 export function ProfilePage() {
@@ -49,10 +48,14 @@ export function ProfilePage() {
       toast({ variant: "error", title: "Senha deve ter pelo menos 6 caracteres" });
       return;
     }
-    const supabase = createSupabaseBrowserClient();
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-    if (error) {
-      toast({ variant: "error", title: error.message });
+    const res = await fetch("/api/dashboard/profile/password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: newPassword }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      toast({ variant: "error", title: data.error ?? "Erro ao alterar senha" });
     } else {
       setNewPassword("");
       toast({ variant: "success", title: "Senha alterada com sucesso" });

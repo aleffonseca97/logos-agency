@@ -30,7 +30,7 @@ import {
   type ContactFormData,
 } from "./types";
 
-export function ContactForm() {
+export function ContactForm({ whatsappNumber }: { whatsappNumber: string }) {
   const t = useTranslations("contact");
   const tValidation = useTranslations("validation");
   const reduceMotion = useReducedMotion();
@@ -179,7 +179,7 @@ export function ContactForm() {
   };
 
   if (isSuccess) {
-    return <ContactSuccess onReset={handleReset} />;
+    return <ContactSuccess whatsappNumber={whatsappNumber} onReset={handleReset} />;
   }
 
   return (

@@ -90,7 +90,7 @@ export function SettingsPage() {
 
         <div className="border-logos-border border-t pt-4">
           <p className="text-logos-text-muted mb-2 text-xs">
-            Resend e Supabase são configurados via variáveis de ambiente (.env.local).
+            Resend e PostgreSQL são configurados via variáveis de ambiente (.env.local).
           </p>
         </div>
 

@@ -8,7 +8,7 @@ export function SectionSkeleton() {
         <div className="bg-logos-border mx-auto h-6 w-24 rounded-full" />
         <div className="bg-logos-border mx-auto h-10 max-w-lg rounded-lg" />
         <div className="bg-logos-border mx-auto h-4 max-w-md rounded" />
-        <div className="logos-grid mt-12 gap-4 lg:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 3 }).map((_, index) => (
             <div
               key={index}

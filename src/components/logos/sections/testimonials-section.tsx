@@ -26,7 +26,7 @@ export function TestimonialsSection() {
         align="center"
       />
 
-      <RevealGroup className="logos-grid gap-4 sm:gap-6 lg:grid-cols-3">
+      <RevealGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {TESTIMONIAL_KEYS.map((key) => (
           <RevealItem key={key}>
             {key === featuredTestimonial ? (

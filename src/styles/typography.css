@@ -76,6 +76,22 @@
     font-weight: 600;
   }
 
+  .logos-text-display-md {
+    font-family: var(--font-heading);
+    font-size: var(--logos-text-display-md);
+    line-height: var(--logos-leading-tight);
+    letter-spacing: var(--logos-tracking-tight);
+    font-weight: 600;
+  }
+
+  .logos-text-display-sm {
+    font-family: var(--font-heading);
+    font-size: var(--logos-text-display-sm);
+    line-height: var(--logos-leading-tight);
+    letter-spacing: var(--logos-tracking-tight);
+    font-weight: 600;
+  }
+
   .logos-text-body-lg {
     font-family: var(--font-body);
     font-size: var(--logos-text-body-lg);

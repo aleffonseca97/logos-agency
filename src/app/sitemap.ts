@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
 
-import { siteConfig } from "@/config/site";
+import { getAppUrl } from "@/lib/env";
 import { locales } from "@/i18n/config";
 import { getLocalizedPath } from "@/i18n/paths";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = siteConfig.url.replace(/\/$/, "");
+  const base = getAppUrl().replace(/\/$/, "");
 
   return locales.map((locale) => ({
     url: `${base}${getLocalizedPath(locale, "/")}`,

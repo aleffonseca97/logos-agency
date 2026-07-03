@@ -20,7 +20,7 @@ import { SectionShell } from "@/components/logos/sections/lib/section-shell";
 
 import { ContactForm } from "./contact-form";
 
-export function ContactSection() {
+export function ContactSection({ whatsappNumber }: { whatsappNumber: string }) {
   const t = useTranslations("contact");
 
   return (
@@ -55,7 +55,7 @@ export function ContactSection() {
                 </div>
               </RevealItem>
               <RevealItem>
-                <ContactForm />
+                <ContactForm whatsappNumber={whatsappNumber} />
               </RevealItem>
             </RevealGroup>
           </div>

@@ -56,8 +56,8 @@ export function HeroSection({ className }: HeroSectionProps) {
       <NoiseLayer intensity="subtle" className="z-0" />
 
       <CursorSpotlight intensity="subtle" className="z-10 w-full">
-        <Container className="relative py-20 lg:py-28">
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20">
+        <Container className="relative py-16 sm:py-20 lg:py-28">
+          <div className="grid items-center gap-12 md:grid-cols-2 md:gap-10 lg:gap-16 xl:gap-20">
             <MotionDiv
               className="flex flex-col items-start gap-8"
               {...(!reduceMotion && {
@@ -109,7 +109,7 @@ export function HeroSection({ className }: HeroSectionProps) {
               </MotionDiv>
 
               <MotionDiv
-                className="border-logos-border flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-8"
+                className="border-logos-border flex flex-wrap items-center gap-x-4 gap-y-2 border-t pt-8 sm:gap-x-6"
                 {...(!reduceMotion && { variants: sectionFadeUp })}
               >
                 {HERO_STAT_KEYS.map((key) => (

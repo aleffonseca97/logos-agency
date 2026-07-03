@@ -11,15 +11,15 @@ import {
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function GET(_request: Request, context: RouteContext) {
-  const { supabase, error } = await requireAuth();
+  const { error } = await requireAuth();
   if (error) return error;
 
   const { id } = await context.params;
 
   try {
     const [lead, activities] = await Promise.all([
-      findLeadById(supabase, id),
-      findLeadActivities(supabase, id),
+      findLeadById(id),
+      findLeadActivities(id),
     ]);
 
     if (!lead) {
@@ -34,14 +34,14 @@ export async function GET(_request: Request, context: RouteContext) {
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
-  const { supabase, error } = await requireAuth();
+  const { error } = await requireAuth();
   if (error) return error;
 
   const { id } = await context.params;
   const body = await request.json();
 
   try {
-    const lead = await updateLead(supabase, id, body);
+    const lead = await updateLead(id, body);
     return NextResponse.json(lead);
   } catch (e) {
     console.error("[api/dashboard/leads/[id] PATCH]", e);
@@ -50,13 +50,13 @@ export async function PATCH(request: Request, context: RouteContext) {
 }
 
 export async function DELETE(_request: Request, context: RouteContext) {
-  const { supabase, error } = await requireAuth();
+  const { error } = await requireAuth();
   if (error) return error;
 
   const { id } = await context.params;
 
   try {
-    await deleteLead(supabase, id);
+    await deleteLead(id);
     return NextResponse.json({ success: true });
   } catch (e) {
     console.error("[api/dashboard/leads/[id] DELETE]", e);

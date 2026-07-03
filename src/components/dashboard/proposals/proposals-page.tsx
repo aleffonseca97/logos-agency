@@ -64,6 +64,7 @@ export function ProposalsPage() {
   });
 
   const handlePdf = (proposal: { title: string; value: number; description: string | null; deadline: string | null }) => {
+    const origin = window.location.origin;
     const html = `<!DOCTYPE html><html><head><title>${proposal.title}</title>
       <style>body{font-family:sans-serif;padding:40px;background:#0b0f19;color:#f8fafc}
       h1{color:#2563eb}table{width:100%;margin-top:20px}td{padding:8px 0;border-bottom:1px solid #333}</style></head>
@@ -71,7 +72,7 @@ export function ProposalsPage() {
       <table><tr><td>Valor</td><td>${formatCurrency(proposal.value)}</td></tr>
       <tr><td>Prazo</td><td>${proposal.deadline ?? "—"}</td></tr></table>
       <p style="margin-top:24px">${proposal.description ?? ""}</p>
-      <img src="${siteConfig.url}${branding.logo.markSrc}" alt="${siteConfig.name}" style="height:30px;width:30px;margin-top:40px;" />
+      <img src="${origin}${branding.logo.markSrc}" alt="${siteConfig.name}" style="height:30px;width:30px;margin-top:40px;" />
       </body></html>`;
     const w = window.open("", "_blank");
     w?.document.write(html);

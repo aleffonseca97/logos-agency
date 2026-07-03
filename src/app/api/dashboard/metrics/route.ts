@@ -4,11 +4,11 @@ import { requireAuth } from "@/lib/auth";
 import { getDashboardMetrics } from "@/repositories/dashboard.repository";
 
 export async function GET() {
-  const { supabase, error } = await requireAuth();
+  const { error } = await requireAuth();
   if (error) return error;
 
   try {
-    const metrics = await getDashboardMetrics(supabase);
+    const metrics = await getDashboardMetrics();
     return NextResponse.json(metrics);
   } catch (e) {
     console.error("[api/dashboard/metrics]", e);

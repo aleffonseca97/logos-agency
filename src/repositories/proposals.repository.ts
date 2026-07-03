@@ -1,64 +1,65 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { desc, eq } from "drizzle-orm";
 
-import type { Database } from "@/lib/supabase/admin";
+import { getDb } from "@/lib/db";
+import { mapProposal } from "@/lib/db/mappers";
+import { proposals } from "@/lib/db/schema";
 import type { Proposal, ProposalInsert } from "@/types/proposal";
 
-type Db = SupabaseClient<Database>;
-
-export async function findProposals(supabase: Db) {
-  const { data, error } = await supabase
-    .from("proposals")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-  return data ?? [];
+export async function findProposals() {
+  const db = getDb();
+  const rows = await db.select().from(proposals).orderBy(desc(proposals.createdAt));
+  return rows.map(mapProposal);
 }
 
-export async function findProposalById(supabase: Db, id: string) {
-  const { data, error } = await supabase
-    .from("proposals")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) return null;
-  return data;
+export async function findProposalById(id: string) {
+  const db = getDb();
+  const [row] = await db.select().from(proposals).where(eq(proposals.id, id)).limit(1);
+  return row ? mapProposal(row) : null;
 }
 
-export async function createProposal(supabase: Db, proposal: ProposalInsert) {
-  const { data, error } = await supabase
-    .from("proposals")
-    .insert(proposal)
-    .select()
-    .single();
+export async function createProposal(proposal: ProposalInsert) {
+  const db = getDb();
+  const [row] = await db
+    .insert(proposals)
+    .values({
+      leadId: proposal.lead_id,
+      clientId: proposal.client_id,
+      title: proposal.title,
+      value: proposal.value.toString(),
+      description: proposal.description,
+      deadline: proposal.deadline,
+      status: proposal.status,
+      createdBy: proposal.created_by,
+    })
+    .returning();
 
-  if (error) throw error;
-  return data;
+  return mapProposal(row);
 }
 
-export async function updateProposal(
-  supabase: Db,
-  id: string,
-  updates: Partial<ProposalInsert>,
-) {
-  const { data, error } = await supabase
-    .from("proposals")
-    .update(updates)
-    .eq("id", id)
-    .select()
-    .single();
+export async function updateProposal(id: string, updates: Partial<ProposalInsert>) {
+  const db = getDb();
+  const [row] = await db
+    .update(proposals)
+    .set({
+      ...(updates.lead_id !== undefined && { leadId: updates.lead_id }),
+      ...(updates.client_id !== undefined && { clientId: updates.client_id }),
+      ...(updates.title !== undefined && { title: updates.title }),
+      ...(updates.value !== undefined && { value: updates.value.toString() }),
+      ...(updates.description !== undefined && { description: updates.description }),
+      ...(updates.deadline !== undefined && { deadline: updates.deadline }),
+      ...(updates.status !== undefined && { status: updates.status }),
+      ...(updates.created_by !== undefined && { createdBy: updates.created_by }),
+      updatedAt: new Date(),
+    })
+    .where(eq(proposals.id, id))
+    .returning();
 
-  if (error) throw error;
-  return data;
+  if (!row) throw new Error("Proposta não encontrada");
+  return mapProposal(row);
 }
 
-export async function duplicateProposal(
-  supabase: Db,
-  proposal: Proposal,
-  userId: string,
-) {
-  return createProposal(supabase, {
+export async function duplicateProposal(proposal: Proposal, userId: string) {
+  return createProposal({
     lead_id: proposal.lead_id,
     client_id: proposal.client_id,
     title: `${proposal.title} (cópia)`,
@@ -70,7 +71,7 @@ export async function duplicateProposal(
   });
 }
 
-export async function deleteProposal(supabase: Db, id: string) {
-  const { error } = await supabase.from("proposals").delete().eq("id", id);
-  if (error) throw error;
+export async function deleteProposal(id: string) {
+  const db = getDb();
+  await db.delete(proposals).where(eq(proposals.id, id));
 }

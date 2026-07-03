@@ -4,30 +4,30 @@ import { requireAuth } from "@/lib/auth";
 import { findProjects, createProject } from "@/repositories/settings.repository";
 
 export async function GET() {
-  const { supabase, error } = await requireAuth();
+  const { error } = await requireAuth();
   if (error) return error;
 
   try {
-    const projects = await findProjects(supabase);
+    const projects = await findProjects();
     return NextResponse.json(projects);
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: "Erro ao carregar projetos." }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
-  const { supabase, user, error } = await requireAuth();
+  const { user, error } = await requireAuth();
   if (error) return error;
 
   const body = await request.json();
 
   try {
-    const project = await createProject(supabase, {
+    const project = await createProject({
       ...body,
       created_by: user!.id,
     });
     return NextResponse.json(project);
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: "Erro ao criar projeto." }, { status: 500 });
   }
 }

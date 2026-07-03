@@ -1,5 +1,5 @@
 import { defaultLocale, localeLabels, type Locale } from "./config";
-import { siteConfig } from "@/config/site";
+import { getAppUrl } from "@/lib/env";
 
 export function getLocalizedPath(locale: Locale, pathname = "/"): string {
   const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`;
@@ -12,7 +12,7 @@ export function getLocalizedPath(locale: Locale, pathname = "/"): string {
 }
 
 export function getAlternateLanguages(pathname = "/"): Record<string, string> {
-  const base = siteConfig.url.replace(/\/$/, "");
+  const base = getAppUrl().replace(/\/$/, "");
 
   return Object.fromEntries(
     (Object.keys(localeLabels) as Locale[]).map((locale) => [

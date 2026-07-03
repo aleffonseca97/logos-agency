@@ -7,7 +7,7 @@ import { ChevronLeft, LogOut, Sparkles } from "lucide-react";
 
 import { dashboardNav } from "@/config/dashboard";
 import { cn } from "@/lib/utils";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useNotifications } from "@/hooks/use-dashboard-query";
 
@@ -29,8 +29,7 @@ export function DashboardSidebar({
   const { unreadCount } = useNotifications();
 
   const handleLogout = async () => {
-    const supabase = createSupabaseBrowserClient();
-    await supabase.auth.signOut();
+    await signOut({ redirect: false });
     router.push("/login");
     router.refresh();
   };

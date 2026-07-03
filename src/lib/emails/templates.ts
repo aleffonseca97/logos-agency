@@ -1,6 +1,7 @@
 import type { LeadRow } from "@/types/lead";
 import { branding } from "@/config/branding";
 import { siteConfig } from "@/config/site";
+import { getAppUrl } from "@/lib/env";
 
 const BRAND = {
   background: "#0b0f19",
@@ -29,7 +30,7 @@ function formatDate(isoDate: string): string {
 }
 
 function brandLogoHtml(height = 30): string {
-  const src = escapeHtml(`${siteConfig.url}${branding.logo.markSrc}`);
+  const src = escapeHtml(`${getAppUrl()}${branding.logo.markSrc}`);
   const width = height;
 
   return `<img src="${src}" alt="${escapeHtml(siteConfig.name)}" width="${width}" height="${height}" style="height:${height}px;width:${width}px;display:block;margin:0 auto 8px;" />`;

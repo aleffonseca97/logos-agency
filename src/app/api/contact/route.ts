@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { checkRateLimit, pruneRateLimitStore } from "@/lib/rate-limit";
 import { getClientIp, getUserAgent } from "@/lib/request-meta";
 import { isResendConfigured } from "@/lib/resend";
-import { isSupabaseConfigured } from "@/lib/supabase/admin";
+import { isDatabaseConfigured } from "@/lib/db";
 import {
   createContactFormSchema,
   isFormSubmittedTooFast,
@@ -13,7 +13,6 @@ import {
 import { createLead, LeadServiceError } from "@/services/lead.service";
 import { sendLeadEmails } from "@/services/email.service";
 import { notifyAllAdmins } from "@/repositories/notifications.repository";
-import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 
@@ -40,8 +39,8 @@ function jsonError(
 export async function POST(request: Request) {
   pruneRateLimitStore();
 
-  if (!isSupabaseConfigured()) {
-    console.error("[api/contact] Supabase não configurado");
+  if (!isDatabaseConfigured()) {
+    console.error("[api/contact] Banco de dados não configurado");
     return jsonError(
       "Serviço temporariamente indisponível. Tente novamente mais tarde.",
       503,
@@ -109,8 +108,7 @@ export async function POST(request: Request) {
     }
 
     try {
-      const admin = getSupabaseAdmin();
-      await notifyAllAdmins(admin, {
+      await notifyAllAdmins({
         type: "new_lead",
         title: "Novo lead recebido",
         message: `${lead.name} (${lead.company}) enviou um projeto via site.`,

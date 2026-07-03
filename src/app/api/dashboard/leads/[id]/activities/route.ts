@@ -7,7 +7,7 @@ import { sanitizeText } from "@/lib/sanitize";
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function POST(request: Request, context: RouteContext) {
-  const { supabase, user, error } = await requireAuth();
+  const { user, error } = await requireAuth();
   if (error) return error;
 
   const { id } = await context.params;
@@ -18,7 +18,7 @@ export async function POST(request: Request, context: RouteContext) {
   }
 
   try {
-    const activity = await createLeadActivity(supabase, {
+    const activity = await createLeadActivity({
       lead_id: id,
       type,
       content: sanitizeText(content, 1000),

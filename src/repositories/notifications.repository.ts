@@ -1,101 +1,85 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { and, count, desc, eq } from "drizzle-orm";
 
-import type { Database } from "@/lib/supabase/admin";
+import { getDb } from "@/lib/db";
+import { mapNotification } from "@/lib/db/mappers";
+import { notifications, profiles } from "@/lib/db/schema";
 import type { NotificationType } from "@/types/notification";
 
-type Db = SupabaseClient<Database>;
-
-export async function findNotifications(supabase: Db, userId: string) {
-  const { data, error } = await supabase
-    .from("notifications")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
+export async function findNotifications(userId: string) {
+  const db = getDb();
+  const rows = await db
+    .select()
+    .from(notifications)
+    .where(eq(notifications.userId, userId))
+    .orderBy(desc(notifications.createdAt))
     .limit(50);
 
-  if (error) throw error;
-  return data ?? [];
+  return rows.map(mapNotification);
 }
 
-export async function countUnreadNotifications(
-  supabase: Db,
-  userId: string,
-): Promise<number> {
-  const { count, error } = await supabase
-    .from("notifications")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", userId)
-    .eq("read", false);
+export async function countUnreadNotifications(userId: string): Promise<number> {
+  const db = getDb();
+  const [row] = await db
+    .select({ total: count() })
+    .from(notifications)
+    .where(and(eq(notifications.userId, userId), eq(notifications.read, false)));
 
-  if (error) return 0;
-  return count ?? 0;
+  return row?.total ?? 0;
 }
 
-export async function markNotificationRead(
-  supabase: Db,
-  id: string,
-  userId: string,
-) {
-  const { error } = await supabase
-    .from("notifications")
-    .update({ read: true })
-    .eq("id", id)
-    .eq("user_id", userId);
-
-  if (error) throw error;
+export async function markNotificationRead(id: string, userId: string) {
+  const db = getDb();
+  await db
+    .update(notifications)
+    .set({ read: true })
+    .where(and(eq(notifications.id, id), eq(notifications.userId, userId)));
 }
 
-export async function markAllNotificationsRead(
-  supabase: Db,
-  userId: string,
-) {
-  const { error } = await supabase
-    .from("notifications")
-    .update({ read: true })
-    .eq("user_id", userId)
-    .eq("read", false);
-
-  if (error) throw error;
+export async function markAllNotificationsRead(userId: string) {
+  const db = getDb();
+  await db
+    .update(notifications)
+    .set({ read: true })
+    .where(and(eq(notifications.userId, userId), eq(notifications.read, false)));
 }
 
-export async function createNotification(
-  supabase: Db,
-  notification: {
-    user_id: string;
-    type: NotificationType;
-    title: string;
-    message: string;
-    link?: string;
-  },
-) {
-  const { data, error } = await supabase
-    .from("notifications")
-    .insert({
-      ...notification,
+export async function createNotification(notification: {
+  user_id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  link?: string;
+}) {
+  const db = getDb();
+  const [row] = await db
+    .insert(notifications)
+    .values({
+      userId: notification.user_id,
+      type: notification.type,
+      title: notification.title,
+      message: notification.message,
       link: notification.link ?? null,
       read: false,
     })
-    .select()
-    .single();
+    .returning();
 
-  if (error) throw error;
-  return data;
+  return mapNotification(row);
 }
 
 export async function notifyAllAdmins(
-  supabase: Db,
-  notification: Omit<Parameters<typeof createNotification>[1], "user_id">,
+  notification: Omit<Parameters<typeof createNotification>[0], "user_id">,
 ) {
-  const { data: profiles } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("role", "admin");
+  const db = getDb();
+  const adminProfiles = await db
+    .select({ id: profiles.id })
+    .from(profiles)
+    .where(eq(profiles.role, "admin"));
 
-  if (!profiles?.length) return;
+  if (!adminProfiles.length) return;
 
   await Promise.all(
-    profiles.map((p) =>
-      createNotification(supabase, { ...notification, user_id: p.id }),
+    adminProfiles.map((p) =>
+      createNotification({ ...notification, user_id: p.id }),
     ),
   );
 }

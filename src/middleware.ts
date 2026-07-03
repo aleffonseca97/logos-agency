@@ -1,5 +1,6 @@
 import createIntlMiddleware from "next-intl/middleware";
-import { type NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { type NextRequest, NextResponse } from "next/server";
 
 import {
   defaultLocale,
@@ -8,7 +9,6 @@ import {
   type Locale,
 } from "@/i18n/config";
 import { routing } from "@/i18n/routing";
-import { updateSession } from "@/lib/supabase/middleware";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -29,7 +29,28 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (isAppRoute(pathname)) {
-    return updateSession(request);
+    const token = await getToken({
+      req: request,
+      secret: process.env.AUTH_SECRET,
+    });
+
+    const isDashboard = pathname.startsWith("/dashboard");
+    const isLogin = pathname === "/login";
+
+    if (isDashboard && !token) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(url);
+    }
+
+    if (isLogin && token) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
+
+    return NextResponse.next();
   }
 
   const response = intlMiddleware(request);

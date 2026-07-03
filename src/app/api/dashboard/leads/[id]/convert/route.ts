@@ -8,18 +8,18 @@ import { LEAD_STATUS } from "@/types/lead";
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function POST(_request: Request, context: RouteContext) {
-  const { supabase, user, error } = await requireAuth();
+  const { user, error } = await requireAuth();
   if (error) return error;
 
   const { id } = await context.params;
 
   try {
-    const lead = await findLeadById(supabase, id);
+    const lead = await findLeadById(id);
     if (!lead) {
       return NextResponse.json({ error: "Lead não encontrado." }, { status: 404 });
     }
 
-    const client = await convertLeadToClient(supabase, {
+    const client = await convertLeadToClient({
       lead_id: lead.id,
       name: lead.name,
       company: lead.company,
@@ -29,7 +29,7 @@ export async function POST(_request: Request, context: RouteContext) {
       created_by: user!.id,
     });
 
-    await updateLead(supabase, id, { status: LEAD_STATUS.FECHADO });
+    await updateLead(id, { status: LEAD_STATUS.FECHADO });
 
     return NextResponse.json(client);
   } catch (e) {

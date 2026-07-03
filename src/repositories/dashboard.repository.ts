@@ -1,8 +1,7 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { ilike, or } from "drizzle-orm";
 
-import type { Database } from "@/lib/supabase/admin";
-
-type Db = SupabaseClient<Database>;
+import { getDb } from "@/lib/db";
+import { clients, leads, projects, proposals } from "@/lib/db/schema";
 
 export type DashboardMetrics = {
   totalLeads: number;
@@ -22,14 +21,32 @@ export type DashboardMetrics = {
   leadsBySource: Array<{ source: string; count: number }>;
 };
 
-export async function getDashboardMetrics(supabase: Db): Promise<DashboardMetrics> {
-  const { data: leads, error } = await supabase
-    .from("leads")
-    .select("id, name, company, status, source, created_at, estimated_value, budget");
+export async function getDashboardMetrics(): Promise<DashboardMetrics> {
+  const db = getDb();
+  const rows = await db
+    .select({
+      id: leads.id,
+      name: leads.name,
+      company: leads.company,
+      status: leads.status,
+      source: leads.source,
+      createdAt: leads.createdAt,
+      estimatedValue: leads.estimatedValue,
+      budget: leads.budget,
+    })
+    .from(leads);
 
-  if (error) throw error;
+  const all = rows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    company: r.company,
+    status: r.status,
+    source: r.source,
+    created_at: r.createdAt.toISOString(),
+    estimated_value: r.estimatedValue ? Number(r.estimatedValue) : null,
+    budget: r.budget,
+  }));
 
-  const all = leads ?? [];
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
@@ -117,39 +134,68 @@ function parseBudget(budget: string): number {
   return 0;
 }
 
-export async function globalSearch(
-  supabase: Db,
-  query: string,
-) {
+export async function globalSearch(query: string) {
+  const db = getDb();
   const term = `%${query}%`;
 
-  const [leads, clients, projects, proposals] = await Promise.all([
-    supabase
-      .from("leads")
-      .select("id, name, company, email, status")
-      .or(`name.ilike.${term},company.ilike.${term},email.ilike.${term}`)
+  const [leadRows, clientRows, projectRows, proposalRows] = await Promise.all([
+    db
+      .select({
+        id: leads.id,
+        name: leads.name,
+        company: leads.company,
+        email: leads.email,
+        status: leads.status,
+      })
+      .from(leads)
+      .where(
+        or(
+          ilike(leads.name, term),
+          ilike(leads.company, term),
+          ilike(leads.email, term),
+        ),
+      )
       .limit(5),
-    supabase
-      .from("clients")
-      .select("id, name, company, email")
-      .or(`name.ilike.${term},company.ilike.${term},email.ilike.${term}`)
+    db
+      .select({
+        id: clients.id,
+        name: clients.name,
+        company: clients.company,
+        email: clients.email,
+      })
+      .from(clients)
+      .where(
+        or(
+          ilike(clients.name, term),
+          ilike(clients.company, term),
+          ilike(clients.email, term),
+        ),
+      )
       .limit(5),
-    supabase
-      .from("projects")
-      .select("id, name, status")
-      .ilike("name", term)
+    db
+      .select({ id: projects.id, name: projects.name, status: projects.status })
+      .from(projects)
+      .where(ilike(projects.name, term))
       .limit(5),
-    supabase
-      .from("proposals")
-      .select("id, title, status, value")
-      .ilike("title", term)
+    db
+      .select({
+        id: proposals.id,
+        title: proposals.title,
+        status: proposals.status,
+        value: proposals.value,
+      })
+      .from(proposals)
+      .where(ilike(proposals.title, term))
       .limit(5),
   ]);
 
   return {
-    leads: leads.data ?? [],
-    clients: clients.data ?? [],
-    projects: projects.data ?? [],
-    proposals: proposals.data ?? [],
+    leads: leadRows,
+    clients: clientRows,
+    projects: projectRows,
+    proposals: proposalRows.map((p) => ({
+      ...p,
+      value: Number(p.value),
+    })),
   };
 }

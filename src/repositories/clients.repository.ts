@@ -1,66 +1,66 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { desc, eq } from "drizzle-orm";
 
-import type { Database } from "@/lib/supabase/admin";
+import { getDb } from "@/lib/db";
+import { mapClient } from "@/lib/db/mappers";
+import { clients } from "@/lib/db/schema";
 import type { Client, ClientInsert } from "@/types/client";
 
-type Db = SupabaseClient<Database>;
-
-export async function findClients(supabase: Db) {
-  const { data, error } = await supabase
-    .from("clients")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-  return data ?? [];
+export async function findClients() {
+  const db = getDb();
+  const rows = await db.select().from(clients).orderBy(desc(clients.createdAt));
+  return rows.map(mapClient);
 }
 
-export async function findClientById(supabase: Db, id: string) {
-  const { data, error } = await supabase
-    .from("clients")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) return null;
-  return data;
+export async function findClientById(id: string) {
+  const db = getDb();
+  const [row] = await db.select().from(clients).where(eq(clients.id, id)).limit(1);
+  return row ? mapClient(row) : null;
 }
 
-export async function createClient(supabase: Db, client: ClientInsert) {
-  const { data, error } = await supabase
-    .from("clients")
-    .insert(client)
-    .select()
-    .single();
+export async function createClientRecord(client: ClientInsert) {
+  const db = getDb();
+  const [row] = await db
+    .insert(clients)
+    .values({
+      leadId: client.lead_id,
+      name: client.name,
+      company: client.company,
+      email: client.email,
+      phone: client.phone,
+      notes: client.notes,
+      createdBy: client.created_by,
+    })
+    .returning();
 
-  if (error) throw error;
-  return data;
+  return mapClient(row);
 }
 
-export async function convertLeadToClient(
-  supabase: Db,
-  lead: ClientInsert,
-): Promise<Client> {
-  return createClient(supabase, lead);
+export async function convertLeadToClient(lead: ClientInsert): Promise<Client> {
+  return createClientRecord(lead);
 }
 
-export async function updateClient(
-  supabase: Db,
-  id: string,
-  updates: Partial<ClientInsert>,
-) {
-  const { data, error } = await supabase
-    .from("clients")
-    .update(updates)
-    .eq("id", id)
-    .select()
-    .single();
+export async function updateClient(id: string, updates: Partial<ClientInsert>) {
+  const db = getDb();
+  const [row] = await db
+    .update(clients)
+    .set({
+      ...(updates.lead_id !== undefined && { leadId: updates.lead_id }),
+      ...(updates.name !== undefined && { name: updates.name }),
+      ...(updates.company !== undefined && { company: updates.company }),
+      ...(updates.email !== undefined && { email: updates.email }),
+      ...(updates.phone !== undefined && { phone: updates.phone }),
+      ...(updates.notes !== undefined && { notes: updates.notes }),
+      ...(updates.created_by !== undefined && { createdBy: updates.created_by }),
+      updatedAt: new Date(),
+    })
+    .where(eq(clients.id, id))
+    .returning();
 
-  if (error) throw error;
-  return data;
+  if (!row) throw new Error("Cliente não encontrado");
+  return mapClient(row);
 }
 
-export async function deleteClient(supabase: Db, id: string) {
-  const { error } = await supabase.from("clients").delete().eq("id", id);
-  if (error) throw error;
+export async function deleteClient(id: string) {
+  const db = getDb();
+  await db.delete(clients).where(eq(clients.id, id));
 }

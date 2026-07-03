@@ -7,7 +7,7 @@ import { LEAD_PIPELINE, type LeadPipelineStatus } from "@/types/lead";
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, context: RouteContext) {
-  const { supabase, user, error } = await requireAuth();
+  const { user, error } = await requireAuth();
   if (error) return error;
 
   const { id } = await context.params;
@@ -23,7 +23,6 @@ export async function PATCH(request: Request, context: RouteContext) {
 
   try {
     const lead = await updateLeadsStatus(
-      supabase,
       id,
       status as LeadPipelineStatus,
       user!.id,

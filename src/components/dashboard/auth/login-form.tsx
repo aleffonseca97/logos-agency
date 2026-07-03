@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, Sparkles } from "lucide-react";
 
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Button } from "@/components/logos/button";
 import { Input } from "@/components/logos/input";
 import { useToast } from "@/components/logos/toast";
@@ -21,11 +21,14 @@ export function LoginForm() {
     e.preventDefault();
     setLoading(true);
 
-    const supabase = createSupabaseBrowserClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
 
-    if (error) {
-      toast({ variant: "error", title: "Falha no login", description: error.message });
+    if (result?.error) {
+      toast({ variant: "error", title: "Falha no login", description: "E-mail ou senha inválidos." });
       setLoading(false);
       return;
     }

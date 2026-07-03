@@ -4,13 +4,13 @@ import { requireAuth } from "@/lib/auth";
 import { findLeads } from "@/repositories/leads.repository";
 
 export async function GET(request: NextRequest) {
-  const { supabase, error } = await requireAuth();
+  const { error } = await requireAuth();
   if (error) return error;
 
   const { searchParams } = request.nextUrl;
 
   try {
-    const result = await findLeads(supabase, {
+    const result = await findLeads({
       page: Number(searchParams.get("page") ?? 1),
       pageSize: Number(searchParams.get("pageSize") ?? 10),
       search: searchParams.get("search") ?? undefined,

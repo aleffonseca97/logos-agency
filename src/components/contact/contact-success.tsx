@@ -4,16 +4,17 @@ import { m, useReducedMotion } from "framer-motion";
 import { CheckCircle2, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { getWhatsAppUrl } from "@/config/contact";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Button } from "@/components/logos/button";
 import { CtaButton } from "@/components/logos/cta-button";
 import { scrollToSection } from "@/lib/scroll-to-section";
 
 type ContactSuccessProps = {
+  whatsappNumber: string;
   onReset: () => void;
 };
 
-export function ContactSuccess({ onReset }: ContactSuccessProps) {
+export function ContactSuccess({ whatsappNumber, onReset }: ContactSuccessProps) {
   const t = useTranslations("contact");
   const tBrand = useTranslations("branding");
   const reduceMotion = useReducedMotion();
@@ -68,7 +69,7 @@ export function ContactSuccess({ onReset }: ContactSuccessProps) {
         <CtaButton
           render={
             <a
-              href={getWhatsAppUrl(whatsappMessage)}
+              href={buildWhatsAppUrl(whatsappNumber, whatsappMessage)}
               target="_blank"
               rel="noopener noreferrer"
             />

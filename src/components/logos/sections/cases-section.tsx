@@ -43,7 +43,7 @@ export function CasesSection() {
         description={t("description")}
       />
 
-      <RevealGroup className="logos-grid gap-4 sm:gap-6 lg:grid-cols-3">
+      <RevealGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {CASE_KEYS.map((key) => {
           const title = t(`items.${key}.title`);
 
@@ -64,7 +64,7 @@ export function CasesSection() {
                   </CardDescription>
                 </CardHeader>
                 <CardFooter className="border-logos-border mt-auto border-t pt-4">
-                  <div className="flex w-full items-end justify-between">
+                  <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                       <p className="logos-font-heading text-brand-primary text-2xl font-semibold">
                         {caseMetrics[key]}

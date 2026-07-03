@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { HeroSection } from "@/components/logos/sections/hero";
 import { HomeFooter } from "@/components/logos/sections/home";
 import { SectionSkeleton } from "@/components/layout/section-skeleton";
+import { getWhatsAppNumber } from "@/lib/env";
 import { isValidLocale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 
@@ -69,6 +70,8 @@ export default async function Home({ params }: HomePageProps) {
 
   setRequestLocale(locale);
 
+  const whatsappNumber = getWhatsAppNumber();
+
   return (
     <main id="main-content" className="flex flex-1 flex-col">
       <HeroSection />
@@ -77,7 +80,7 @@ export default async function Home({ params }: HomePageProps) {
       <CasesSection />
       <TestimonialsSection />
       <FaqSection />
-      <ContactSection />
+      <ContactSection whatsappNumber={whatsappNumber} />
       <HomeFooter />
     </main>
   );

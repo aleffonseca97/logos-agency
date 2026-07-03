@@ -12,16 +12,24 @@ Painel completo de captura e gerenciamento de leads da LOGOS Framework.
 
 ## Pré-requisitos
 
-1. Execute as migrations do Supabase:
-   - `supabase/migrations/001_create_leads_table.sql`
-   - `supabase/migrations/002_crm_schema.sql`
+1. PostgreSQL rodando (ex.: container Docker)
+2. Aplique o schema e crie o admin:
 
-2. Configure `.env.local` (copie de `.env.local.example`):
+```bash
+npm run db:seed
+```
+
+O script aplica `db/migrations/001_initial_schema.sql` e cria o usuário admin.
+
+3. Configure `.env.local` (copie de `.env.example`):
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
+DATABASE_URL=postgresql://usuario:senha@localhost:5432/logos_crm
+AUTH_SECRET=
+AUTH_URL=http://localhost:3000
+ADMIN_EMAIL=admin@logos.dev
+ADMIN_PASSWORD=
+
 RESEND_API_KEY=
 CONTACT_EMAIL=
 NEXT_PUBLIC_WHATSAPP_NUMBER=
@@ -31,6 +39,7 @@ NEXT_PUBLIC_WHATSAPP_NUMBER=
 
 ```bash
 npm install
+npm run db:seed
 npm run dev
 ```
 
@@ -40,13 +49,9 @@ npm run dev
 
 ## Como criar usuários
 
-1. Acesse o **Supabase Dashboard → Authentication → Users**
-2. Clique em **Add user → Create new user**
-3. Informe e-mail e senha
-4. O trigger `handle_new_user` cria automaticamente o perfil em `profiles`
-5. Faça login em `/login`
+O seed cria o primeiro admin com `ADMIN_EMAIL` e `ADMIN_PASSWORD`.
 
-> Para produção, desative cadastro público em Authentication → Settings.
+Para novos usuários, insira em `users` (senha com bcrypt) e crie o perfil em `profiles` vinculado ao mesmo `id`.
 
 ## Módulos
 
@@ -71,19 +76,20 @@ src/
 │   ├── dashboard/            # Rotas do CRM
 │   ├── login/
 │   └── api/dashboard/        # API REST autenticada
-├── components/dashboard/       # UI do CRM
-├── repositories/             # Acesso a dados (Supabase)
+├── components/dashboard/     # UI do CRM
+├── repositories/             # Acesso a dados (Drizzle ORM)
 ├── services/                 # Lógica de negócio
 ├── hooks/                    # React Query hooks
 ├── types/                    # TypeScript
-└── lib/supabase/             # Clientes SSR/Browser/Admin
+├── lib/db/                   # Schema e cliente PostgreSQL
+└── lib/auth-options.ts        # NextAuth (credenciais + JWT)
 ```
 
 ## Segurança
 
 - **Middleware** protege `/dashboard/*` — redireciona para `/login`
-- **RLS** no Supabase — usuários autenticados acessam dados via anon key
-- **Service role** apenas server-side (formulário público + notificações)
+- **Auth.js** com sessão JWT e senhas bcrypt
+- **Autorização** nas rotas API via `requireAuth()`
 - Validação Zod na API de contato
 - Rate limit no formulário público
 
@@ -91,46 +97,23 @@ src/
 
 1. Push para GitHub
 2. Importe na Vercel
-3. Adicione todas as variáveis de ambiente
-4. Execute migrations no Supabase de produção
-5. Crie usuário admin no Supabase Auth
+3. Adicione todas as variáveis de ambiente (incluindo `DATABASE_URL` apontando para Postgres acessível)
+4. Execute `npm run db:seed` no ambiente de produção (ou aplique migrations manualmente)
+
+## Scripts de banco
+
+| Comando | Descrição |
+|---|---|
+| `npm run db:push` | Sincroniza schema Drizzle com o banco |
+| `npm run db:migrate` | Aplica migrations Drizzle Kit |
+| `npm run db:seed` | Aplica SQL inicial + cria admin |
 
 ## Como adicionar novos módulos
 
-1. Crie migration SQL se precisar de nova tabela
+1. Atualize `src/lib/db/schema.ts` e gere migration se necessário
 2. Adicione tipos em `src/types/`
 3. Crie repository em `src/repositories/`
 4. Crie API route em `src/app/api/dashboard/`
 5. Crie componente em `src/components/dashboard/`
 6. Adicione rota em `src/app/dashboard/`
 7. Registre no menu em `src/config/dashboard.ts`
-
-## Como alterar permissões
-
-Edite as policies RLS em `002_crm_schema.sql`:
-
-```sql
--- Exemplo: apenas admins
-create policy "Admins only" on public.leads
-  for all to authenticated
-  using (
-    exists (
-      select 1 from profiles
-      where id = auth.uid() and role = 'admin'
-    )
-  );
-```
-
-## Como escalar
-
-- **Performance**: React Query cache, paginação server-side, lazy loading
-- **Notificações**: expandir `notifications.repository.ts` com cron jobs
-- **Google Calendar**: usar campo `google_calendar_id` em `events`
-- **Equipe**: adicionar roles em `profiles.role`
-- **Multi-tenant**: adicionar `org_id` nas tabelas
-
-## Light / Dark Mode
-
-Toggle no topbar do dashboard. Preferência salva em `localStorage` (`logos-theme`).
-
-O site institucional permanece dark-first via design tokens.

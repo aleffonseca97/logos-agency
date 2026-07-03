@@ -3,6 +3,7 @@ import {
   buildTeamLeadEmailHtml,
 } from "@/lib/emails/templates";
 import { siteConfig } from "@/config/site";
+import { getAppUrl } from "@/lib/env";
 import {
   getContactEmail,
   getEmailFromAddress,
@@ -41,7 +42,7 @@ export async function sendClientConfirmationEmail(
   lead: LeadRow,
 ): Promise<void> {
   const resend = getResendClient();
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://logosframework.com";
+  const siteUrl = getAppUrl();
 
   const { error } = await resend.emails.send({
     from: getEmailFromAddress(),

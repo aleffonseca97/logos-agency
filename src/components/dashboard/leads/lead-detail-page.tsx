@@ -21,12 +21,18 @@ import { Badge } from "@/components/logos/badge";
 import { Textarea } from "@/components/logos/textarea";
 import { useLead } from "@/hooks/use-dashboard-query";
 import { useToast } from "@/components/logos/toast";
-import { getWhatsAppUrl } from "@/config/contact";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { siteConfig } from "@/config/site";
 import { formatDate } from "@/utils/export";
 import type { LeadActivity } from "@/types/lead";
 
-export function LeadDetailPage({ id }: { id: string }) {
+export function LeadDetailPage({
+  id,
+  whatsappNumber,
+}: {
+  id: string;
+  whatsappNumber: string;
+}) {
   const router = useRouter();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -100,7 +106,8 @@ export function LeadDetailPage({ id }: { id: string }) {
     activities: LeadActivity[];
   };
 
-  const whatsappUrl = getWhatsAppUrl(
+  const whatsappUrl = buildWhatsAppUrl(
+    whatsappNumber,
     `Olá ${lead.name}! Sou da ${siteConfig.name}. Vi seu projeto de ${lead.project_type} e gostaria de conversar.`,
   );
 

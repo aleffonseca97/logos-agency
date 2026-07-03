@@ -7,7 +7,7 @@ export type OrgSettings = {
   primary_color: string;
   social_links: Record<string, string>;
   resend_configured: boolean;
-  supabase_configured: boolean;
+  database_configured: boolean;
   calendly_url: string | null;
   updated_at: string;
 };

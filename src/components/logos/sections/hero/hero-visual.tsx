@@ -33,7 +33,7 @@ export function HeroVisual() {
     >
       <MouseGlow intensity="subtle" className="rounded-2xl">
         <GlowBorder intensity="medium" borderRadius="1rem">
-          <div className="bg-brand-background relative aspect-[4/5] min-h-[340px] w-full overflow-hidden rounded-2xl sm:aspect-square sm:min-h-[400px] lg:min-h-[520px]">
+          <div className="bg-brand-background relative aspect-[4/5] min-h-[280px] w-full overflow-hidden rounded-2xl sm:aspect-square sm:min-h-[340px] lg:min-h-[520px]">
             <AnimatedGradient intensity="subtle" />
             <AuroraBackground intensity="subtle" />
             <AnimatedBackground intensity="subtle" />

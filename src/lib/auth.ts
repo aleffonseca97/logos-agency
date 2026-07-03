@@ -1,17 +1,20 @@
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { authOptions } from "@/lib/auth-options";
 
 export async function requireAuth() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
+  const session = await getServerSession(authOptions);
 
-  if (error || !user) {
-    return { user: null, supabase, error: NextResponse.json({ error: "Não autorizado." }, { status: 401 }) };
+  if (!session?.user?.id) {
+    return {
+      user: null,
+      error: NextResponse.json({ error: "Não autorizado." }, { status: 401 }),
+    };
   }
 
-  return { user, supabase, error: null };
+  return {
+    user: session.user,
+    error: null,
+  };
 }

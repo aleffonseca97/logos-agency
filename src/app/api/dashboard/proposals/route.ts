@@ -9,39 +9,39 @@ import {
 } from "@/repositories/proposals.repository";
 
 export async function GET() {
-  const { supabase, error } = await requireAuth();
+  const { error } = await requireAuth();
   if (error) return error;
 
   try {
-    const proposals = await findProposals(supabase);
+    const proposals = await findProposals();
     return NextResponse.json(proposals);
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: "Erro ao carregar propostas." }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
-  const { supabase, user, error } = await requireAuth();
+  const { user, error } = await requireAuth();
   if (error) return error;
 
   const body = await request.json();
 
   try {
     if (body.duplicateId) {
-      const original = await findProposalById(supabase, body.duplicateId);
+      const original = await findProposalById(body.duplicateId);
       if (!original) {
         return NextResponse.json({ error: "Proposta não encontrada." }, { status: 404 });
       }
-      const proposal = await duplicateProposal(supabase, original, user!.id);
+      const proposal = await duplicateProposal(original, user!.id);
       return NextResponse.json(proposal);
     }
 
-    const proposal = await createProposal(supabase, {
+    const proposal = await createProposal({
       ...body,
       created_by: user!.id,
     });
     return NextResponse.json(proposal);
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: "Erro ao criar proposta." }, { status: 500 });
   }
 }

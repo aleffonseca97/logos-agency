@@ -34,7 +34,7 @@ export function ServicesSection() {
         description={t("description")}
       />
 
-      <RevealGroup className="logos-grid gap-4 sm:gap-6 lg:grid-cols-3">
+      <RevealGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {SERVICE_KEYS.map((key) => {
           const Icon = serviceIcons[key];
           return (

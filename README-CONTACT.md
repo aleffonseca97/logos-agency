@@ -7,32 +7,33 @@ Guia completo para configurar, testar e fazer deploy do formulário de contato.
 Quando um visitante envia o formulário:
 
 1. Os dados são validados com **Zod**
-2. O lead é salvo na tabela `leads` do **Supabase**
+2. O lead é salvo na tabela `leads` do **PostgreSQL** (via Drizzle ORM)
 3. Um e-mail é enviado para a equipe via **Resend**
 4. Um e-mail de confirmação é enviado ao cliente
 5. A tela de sucesso é exibida com opções de WhatsApp e voltar ao início
 
 ---
 
-## 1. Configurar o Supabase
+## 1. Configurar o PostgreSQL
 
-### Criar o projeto
+### Banco de dados
 
-1. Acesse [supabase.com](https://supabase.com) e crie um projeto
-2. Vá em **Project Settings → API** e copie:
-   - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
-   - `anon public` → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `service_role` → `SUPABASE_SERVICE_ROLE_KEY` (**nunca exponha no client**)
+1. Crie um database (ex.: `logos_crm`) no seu PostgreSQL
+2. Configure `DATABASE_URL` no `.env.local`:
 
-### Criar a tabela
-
-No **SQL Editor** do Supabase, execute o arquivo:
-
-```
-supabase/migrations/001_create_leads_table.sql
+```env
+DATABASE_URL=postgresql://usuario:senha@localhost:5432/logos_crm
 ```
 
-Isso cria a tabela `leads` com os campos:
+### Criar tabelas
+
+```bash
+npm run db:seed
+```
+
+Isso aplica `db/migrations/001_initial_schema.sql` e cria o usuário admin.
+
+A tabela `leads` contém:
 
 | Campo | Tipo | Descrição |
 |---|---|---|
@@ -49,8 +50,6 @@ Isso cria a tabela `leads` com os campos:
 | `source` | text | Padrão: `website` |
 | `ip` | text | IP do visitante (opcional) |
 | `user_agent` | text | User-Agent (opcional) |
-
-A tabela usa **RLS habilitado** sem policies públicas — apenas o `service_role` (server-side) pode inserir.
 
 ---
 
@@ -83,7 +82,7 @@ No sandbox, o Resend só envia para o e-mail da conta cadastrada.
 Copie o template:
 
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 Preencha todas as variáveis:
@@ -91,9 +90,9 @@ Preencha todas as variáveis:
 ```env
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
+DATABASE_URL=postgresql://usuario:senha@localhost:5432/logos_crm
+AUTH_SECRET=...
+AUTH_URL=http://localhost:3000
 
 RESEND_API_KEY=re_...
 RESEND_FROM_EMAIL=LOGOS Framework <onboarding@resend.dev>
@@ -111,6 +110,7 @@ WHATSAPP_NUMBER=5511999999999
 
 ```bash
 npm install
+npm run db:seed
 npm run dev
 ```
 
@@ -121,7 +121,7 @@ npm run dev
 5. Verifique:
    - Toast de sucesso
    - Tela de confirmação
-   - Registro na tabela `leads` do Supabase
+   - Registro na tabela `leads` do PostgreSQL
    - E-mail na caixa `CONTACT_EMAIL`
    - E-mail de confirmação no endereço informado
 
@@ -142,8 +142,8 @@ npm run dev
 
 Variáveis obrigatórias em produção:
 
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `DATABASE_URL`
+- `AUTH_SECRET`
 - `RESEND_API_KEY`
 - `CONTACT_EMAIL`
 - `RESEND_FROM_EMAIL`
@@ -178,7 +178,7 @@ A mensagem padrão está em `src/config/contact.ts` → `getWhatsAppUrl()`.
 
 ### Passo a passo
 
-1. **Supabase** — adicione a coluna na tabela `leads`
+1. **PostgreSQL** — adicione a coluna na tabela `leads` (schema Drizzle + migration)
 2. **`src/types/lead.ts`** — atualize o tipo `Lead`
 3. **`src/lib/validators/contact.ts`** — adicione o campo no schema Zod
 4. **`src/components/contact/types.ts`** — adicione ao `ContactFormData`
@@ -194,7 +194,7 @@ A mensagem padrão está em `src/config/contact.ts` → `getWhatsAppUrl()`.
 src/
 ├── app/api/contact/route.ts      # API Route (orquestração)
 ├── lib/
-│   ├── supabase.ts               # Cliente admin Supabase
+│   ├── db/                       # Drizzle ORM + PostgreSQL
 │   ├── resend.ts                 # Cliente Resend + config
 │   ├── sanitize.ts               # Sanitização de inputs
 │   ├── rate-limit.ts             # Rate limit por IP
@@ -202,7 +202,7 @@ src/
 │   ├── validators/contact.ts     # Schema Zod
 │   └── emails/templates.ts       # Templates HTML
 ├── services/
-│   ├── lead.service.ts           # Persistência no Supabase
+│   ├── lead.service.ts           # Persistência no PostgreSQL
 │   └── email.service.ts          # Envio de e-mails
 ├── types/lead.ts                 # Tipos do lead
 └── components/contact/           # UI do formulário
@@ -219,12 +219,12 @@ src/
 - Rate limit: 5 envios / 15 min por IP
 - Bloqueio de duplicatas: mesmo e-mail em 5 min
 - Chaves privadas apenas em variáveis server-side
-- RLS no Supabase sem acesso público à tabela
+- Formulário público grava via API server-side (sem acesso direto ao banco no client)
 
 ---
 
 ## Suporte
 
-Em caso de erro 503, verifique se `SUPABASE_SERVICE_ROLE_KEY` e `RESEND_API_KEY` estão configurados no ambiente.
+Em caso de erro 503, verifique se `DATABASE_URL` e `RESEND_API_KEY` estão configurados no ambiente.
 
 Logs de erro aparecem no terminal (dev) ou nos logs da Vercel (produção).
