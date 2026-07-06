@@ -1,7 +1,7 @@
 import "server-only";
 
 export function getAppUrl(): string {
-  return process.env.APP_URL ?? "http://localhost:3000";
+  return process.env.APP_URL ?? "http://localhost:2000";
 }
 
 export function getWhatsAppNumber(): string {

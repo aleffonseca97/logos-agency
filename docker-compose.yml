@@ -1,16 +1,19 @@
 services:
   app:
-    image: ${IMAGE_NAME}
+    image: ${IMAGE_NAME:-logos-agency:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: logos-agency
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:2000:2000"
     env_file:
       - .env
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/"]
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:2000/"]
       interval: 30s
       timeout: 5s
       retries: 3
