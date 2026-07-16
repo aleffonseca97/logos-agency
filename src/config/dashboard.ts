@@ -1,13 +1,6 @@
-import {
-  Calendar,
-  FileText,
-  FolderKanban,
-  LayoutDashboard,
-  Settings,
-  UserCircle,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
+import { getActiveNavModules } from "@/config/modules";
+import type { LucideIcon } from "lucide-react";
+import { UserCircle } from "lucide-react";
 
 export type DashboardNavItem = {
   label: string;
@@ -16,15 +9,19 @@ export type DashboardNavItem = {
   badge?: boolean;
 };
 
+/** Nav da sidebar — derivada do registry (apenas módulos ativos com nav: true). */
 export const dashboardNav: DashboardNavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Leads", href: "/dashboard/leads", icon: Users },
-  { label: "Agenda", href: "/dashboard/agenda", icon: Calendar },
-  { label: "Projetos", href: "/dashboard/projetos", icon: FolderKanban },
-  { label: "Clientes", href: "/dashboard/clientes", icon: UserCircle },
-  { label: "Propostas", href: "/dashboard/propostas", icon: FileText },
-  { label: "Configurações", href: "/dashboard/configuracoes", icon: Settings },
-  { label: "Perfil", href: "/dashboard/perfil", icon: UserCircle },
+  ...getActiveNavModules().map((m) => ({
+    label: m.label,
+    href: m.href,
+    icon: m.icon,
+    badge: m.id === "leads",
+  })),
+  {
+    label: "Perfil",
+    href: "/dashboard/perfil",
+    icon: UserCircle,
+  },
 ];
 
 export const LEAD_EXPORT_COLUMNS = [

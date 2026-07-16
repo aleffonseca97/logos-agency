@@ -48,14 +48,14 @@ export function DashboardSidebar({
         {!collapsed && (
           <div className="min-w-0">
             <p className="text-logos-text truncate text-sm font-semibold">
-              LOGOS CRM
+              LOGOS Agency
             </p>
-            <p className="text-logos-text-muted truncate text-xs">Framework</p>
+            <p className="text-logos-text-muted truncate text-xs">Platform</p>
           </div>
         )}
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto p-3" aria-label="CRM">
+      <nav className="flex-1 space-y-1 overflow-y-auto p-3" aria-label="Navegação">
         {dashboardNav.map((item) => {
           const active =
             pathname === item.href ||

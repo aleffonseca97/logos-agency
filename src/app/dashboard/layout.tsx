@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { DashboardShell } from "@/components/dashboard/layout/dashboard-shell";
 
 export const metadata: Metadata = {
-  title: "Dashboard — LOGOS CRM",
+  title: "Dashboard — LOGOS Agency",
   robots: { index: false, follow: false },
 };
 
