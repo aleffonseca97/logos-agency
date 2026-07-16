@@ -116,6 +116,20 @@
   }
 }
 
+/* Infinite clients marquee (Home vitrine) */
+@keyframes logos-clients-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-logos-clients-marquee {
+  animation: logos-clients-marquee 40s linear infinite;
+}
+
 /* Light mode — CRM dashboard */
 :root.light,
 .light {

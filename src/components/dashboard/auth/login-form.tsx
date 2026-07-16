@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Loader2, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/logos/button";
@@ -10,7 +10,6 @@ import { Input } from "@/components/logos/input";
 import { useToast } from "@/components/logos/toast";
 
 export function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
@@ -34,8 +33,7 @@ export function LoginForm() {
     }
 
     const redirect = searchParams.get("redirect") ?? "/dashboard";
-    router.push(redirect);
-    router.refresh();
+    window.location.assign(redirect);
   };
 
   return (

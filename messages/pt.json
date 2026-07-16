@@ -84,6 +84,12 @@
       }
     }
   },
+  "clients": {
+    "badge": "Clientes",
+    "title": "Empresas que confiam na LOGOS",
+    "description": "Marcas e produtos que escolheram a LOGOS para construir e escalar sua presença digital.",
+    "carouselAria": "Logos das empresas clientes"
+  },
   "technologies": {
     "badge": "Tecnologias",
     "title": "Tecnologia de ponta para produtos que evoluem",

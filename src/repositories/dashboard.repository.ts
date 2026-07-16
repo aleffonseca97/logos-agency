@@ -159,15 +159,19 @@ export async function globalSearch(query: string) {
     db
       .select({
         id: clients.id,
-        name: clients.name,
         company: clients.company,
-        email: clients.email,
+        city: clients.city,
+        segment: clients.segment,
+        status: clients.status,
       })
       .from(clients)
       .where(
         or(
-          ilike(clients.name, term),
           ilike(clients.company, term),
+          ilike(clients.city, term),
+          ilike(clients.segment, term),
+          ilike(clients.website, term),
+          ilike(clients.name, term),
           ilike(clients.email, term),
         ),
       )

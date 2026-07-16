@@ -50,7 +50,8 @@ export async function hasRecentDuplicateLead(email: string): Promise<boolean> {
   const since = new Date(Date.now() - DUPLICATE_WINDOW_MS);
   try {
     return await hasRecentLeadByEmail(email, since);
-  } catch {
+  } catch (error) {
+    console.error("[lead.service] hasRecentDuplicateLead error:", error);
     throw new LeadServiceError("Erro ao verificar envios recentes.", "DATABASE");
   }
 }

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 type SearchResults = {
   leads: Array<{ id: string; name: string; company: string; status: string }>;
-  clients: Array<{ id: string; name: string; company: string }>;
+  clients: Array<{ id: string; company: string; city: string | null; segment: string | null; status: string }>;
   projects: Array<{ id: string; name: string; status: string }>;
   proposals: Array<{ id: string; title: string; status: string }>;
 };
@@ -98,8 +98,8 @@ export function GlobalSearch() {
                     <SearchItem
                       key={c.id}
                       href="/dashboard/clientes"
-                      label={c.name}
-                      sub={c.company}
+                      label={c.company}
+                      sub={[c.segment, c.city, c.status].filter(Boolean).join(" · ")}
                       onClick={() => setOpen(false)}
                     />
                   ))}

@@ -84,6 +84,12 @@
       }
     }
   },
+  "clients": {
+    "badge": "Clients",
+    "title": "Companies that trust LOGOS",
+    "description": "Brands and products that chose LOGOS to build and scale their digital presence.",
+    "carouselAria": "Client company logos"
+  },
   "technologies": {
     "badge": "Technologies",
     "title": "Cutting-edge technology for products that evolve",

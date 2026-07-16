@@ -90,11 +90,21 @@ create index if not exists lead_activities_lead_id_idx
 create table if not exists clients (
   id uuid primary key default gen_random_uuid(),
   lead_id uuid references leads(id) on delete set null,
-  name text not null,
   company text not null,
-  email text not null,
-  phone text,
+  logo_url text,
+  website text,
+  segment text,
+  city text,
+  country text,
+  status text not null default 'ativo'
+    check (status in ('ativo', 'inativo')),
+  client_since date,
+  featured_home boolean not null default false,
+  display_order integer not null default 0,
   notes text,
+  name text,
+  email text,
+  phone text,
   created_by uuid references users(id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -102,6 +112,9 @@ create table if not exists clients (
 
 create index if not exists clients_email_idx on clients (email);
 create index if not exists clients_lead_id_idx on clients (lead_id);
+create index if not exists clients_status_idx on clients (status);
+create index if not exists clients_display_order_idx on clients (display_order);
+create index if not exists clients_featured_home_idx on clients (featured_home);
 
 -- ── Projetos ────────────────────────────────────────────────────
 create table if not exists projects (

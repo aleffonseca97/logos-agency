@@ -29,10 +29,17 @@ async function main() {
   const sql = postgres(databaseUrl, { max: 1 });
 
   try {
-    const migrationPath = resolve(__dirname, "../db/migrations/001_initial_schema.sql");
-    const migrationSql = readFileSync(migrationPath, "utf-8");
-    await sql.unsafe(migrationSql);
-    console.log("Schema aplicado com sucesso.");
+    const migrations = [
+      "001_initial_schema.sql",
+      "002_clients_module.sql",
+    ];
+
+    for (const file of migrations) {
+      const migrationPath = resolve(__dirname, `../db/migrations/${file}`);
+      const migrationSql = readFileSync(migrationPath, "utf-8");
+      await sql.unsafe(migrationSql);
+      console.log(`Migration aplicada: ${file}`);
+    }
   } catch (err) {
     console.error("Erro ao aplicar schema:", err);
     process.exit(1);

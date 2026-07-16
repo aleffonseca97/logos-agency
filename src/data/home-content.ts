@@ -3,6 +3,7 @@ import { Code2, Layers, Palette, Rocket, Search, Shield } from "lucide-react";
 
 export const SECTION_IDS = {
   services: "services",
+  clients: "clients",
   technologies: "technologies",
   cases: "cases",
   testimonials: "testimonials",

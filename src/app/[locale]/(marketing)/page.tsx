@@ -17,6 +17,14 @@ const ServicesSection = dynamic(
   { loading: () => <SectionSkeleton /> },
 );
 
+const ClientsSection = dynamic(
+  () =>
+    import("@/components/logos/sections/clients-section").then(
+      (mod) => mod.ClientsSection,
+    ),
+  { loading: () => null },
+);
+
 const TechnologiesSection = dynamic(
   () =>
     import("@/components/logos/sections/technologies-section").then(
@@ -76,6 +84,7 @@ export default async function Home({ params }: HomePageProps) {
     <main id="main-content" className="flex flex-1 flex-col">
       <HeroSection />
       <ServicesSection />
+      <ClientsSection />
       <TechnologiesSection />
       <CasesSection />
       <TestimonialsSection />

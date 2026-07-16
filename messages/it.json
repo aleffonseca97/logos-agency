@@ -84,6 +84,12 @@
       }
     }
   },
+  "clients": {
+    "badge": "Clienti",
+    "title": "Aziende che si affidano a LOGOS",
+    "description": "Brand e prodotti che hanno scelto LOGOS per costruire e scalare la propria presenza digitale.",
+    "carouselAria": "Loghi delle aziende clienti"
+  },
   "technologies": {
     "badge": "Tecnologie",
     "title": "Tecnologia all'avanguardia per prodotti che evolvono",
