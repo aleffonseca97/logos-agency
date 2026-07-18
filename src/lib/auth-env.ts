@@ -1,6 +1,9 @@
 /**
- * Helpers de auth compartilhados entre Node (NextAuth) e Edge/Proxy.
- * Sem "server-only" para poder ser importado no proxy.
+ * Helpers de auth compartilhados entre Node (NextAuth) e Edge (middleware).
+ * Sem "server-only" para poder ser importado no middleware.
+ *
+ * Nota: Next 16.2 + Turbopack no Windows gera middleware-manifest vazio para
+ * proxy.ts em produção; manter middleware.ts até o bug ser corrigido upstream.
  */
 
 export function getAuthSecret(): string | undefined {

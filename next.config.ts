@@ -20,6 +20,18 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  async rewrites() {
+    // Standalone does not serve files written to public/ after process start.
+    // Route runtime uploads through a filesystem-backed API handler.
+    return {
+      beforeFiles: [
+        {
+          source: "/uploads/clients/:filename",
+          destination: "/api/public/uploads/clients/:filename",
+        },
+      ],
+    };
+  },
   async headers() {
     return [
       {
