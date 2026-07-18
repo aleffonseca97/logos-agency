@@ -1,12 +1,13 @@
 "use client";
 
-import { m, useReducedMotion } from "framer-motion";
+import { m } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 
 import { useToast } from "@/components/logos/toast";
 import { CtaButton } from "@/components/logos/cta-button";
+import { useSafeReducedMotion } from "@/hooks/use-safe-reduced-motion";
 import { cn } from "@/lib/utils";
 import {
   createContactFormSchema,
@@ -33,7 +34,7 @@ import {
 export function ContactForm({ whatsappNumber }: { whatsappNumber: string }) {
   const t = useTranslations("contact");
   const tValidation = useTranslations("validation");
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
   const MotionButton = reduceMotion ? "div" : m.div;
   const { toast } = useToast();
 

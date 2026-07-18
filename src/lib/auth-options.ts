@@ -64,17 +64,33 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user }) {
       if (user?.id) {
         token.id = user.id;
         token.role = user.role;
+      } else if (
+        token.id &&
+        token.role !== "admin" &&
+        token.role !== "member"
+      ) {
+        // JWT emitido antes do claim `role`: resolve no banco e persiste no token.
+        const db = getDb();
+        const [profile] = await db
+          .select({ role: profiles.role })
+          .from(profiles)
+          .where(eq(profiles.id, token.id as string))
+          .limit(1);
+        token.role = normalizeRole(profile?.role);
       }
       return token;
     },
     session({ session, token }) {
       if (session.user && token.id) {
         session.user.id = token.id as string;
-        session.user.role = normalizeRole(token.role);
+        // Não coerce role ausente → "member"; senão resolveRole nunca consulta o DB.
+        if (token.role === "admin" || token.role === "member") {
+          session.user.role = token.role;
+        }
       }
       return session;
     },

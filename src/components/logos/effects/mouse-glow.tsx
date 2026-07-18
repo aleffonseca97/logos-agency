@@ -1,7 +1,9 @@
 "use client";
 
-import { m, useReducedMotion } from "framer-motion";
+import { m } from "framer-motion";
 import { useRef } from "react";
+
+import { useSafeReducedMotion } from "@/hooks/use-safe-reduced-motion";
 
 import { EffectContainer } from "./lib/effect-container";
 import { useMousePosition } from "./lib/use-mouse-position";
@@ -15,7 +17,7 @@ export function MouseGlow({
 }: EffectWrapperProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { x, y } = useMousePosition(containerRef);
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useSafeReducedMotion();
   const config = getIntensityConfig(intensity);
 
   return (

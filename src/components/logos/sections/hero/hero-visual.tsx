@@ -1,7 +1,9 @@
 "use client";
 
-import { m, useReducedMotion } from "framer-motion";
+import { m } from "framer-motion";
 import { useTranslations } from "next-intl";
+
+import { useSafeReducedMotion } from "@/hooks/use-safe-reduced-motion";
 
 import {
   AnimatedBackground,
@@ -23,7 +25,7 @@ import { HeroTechPanel } from "./hero-tech-panel";
 
 export function HeroVisual() {
   const t = useTranslations("hero.visual");
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
 
   return (
     <m.div

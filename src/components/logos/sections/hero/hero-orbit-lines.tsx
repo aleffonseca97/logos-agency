@@ -1,9 +1,11 @@
 "use client";
 
-import { m, useReducedMotion } from "framer-motion";
+import { m } from "framer-motion";
+
+import { useSafeReducedMotion } from "@/hooks/use-safe-reduced-motion";
 
 export function HeroOrbitLines() {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
 
   return (
     <svg

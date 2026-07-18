@@ -1,11 +1,12 @@
 "use client";
 
-import { m, useReducedMotion } from "framer-motion";
+import { m } from "framer-motion";
 import { forwardRef, useId, useState } from "react";
 
 import { Input } from "@/components/logos/input";
 import { Textarea } from "@/components/logos/textarea";
 import { getFieldAriaProps } from "@/components/logos/lib/form-field";
+import { useSafeReducedMotion } from "@/hooks/use-safe-reduced-motion";
 import { cn } from "@/lib/utils";
 
 type ContactFieldBaseProps = {
@@ -57,7 +58,7 @@ function FieldError({ id, error }: { id: string; error?: string }) {
 }
 
 function FocusGlow({ isFocused }: { isFocused: boolean }) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
 
   if (reduceMotion) return null;
 

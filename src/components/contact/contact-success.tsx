@@ -1,12 +1,13 @@
 "use client";
 
-import { m, useReducedMotion } from "framer-motion";
+import { m } from "framer-motion";
 import { CheckCircle2, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Button } from "@/components/logos/button";
 import { CtaButton } from "@/components/logos/cta-button";
+import { useSafeReducedMotion } from "@/hooks/use-safe-reduced-motion";
 import { scrollToSection } from "@/lib/scroll-to-section";
 
 type ContactSuccessProps = {
@@ -17,7 +18,7 @@ type ContactSuccessProps = {
 export function ContactSuccess({ whatsappNumber, onReset }: ContactSuccessProps) {
   const t = useTranslations("contact");
   const tBrand = useTranslations("branding");
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
   const MotionDiv = reduceMotion ? "div" : m.div;
 
   const handleBackToTop = () => {

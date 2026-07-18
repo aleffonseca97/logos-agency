@@ -10,7 +10,8 @@ declare module "next-auth" {
       email?: string | null;
       name?: string | null;
       image?: string | null;
-      role: UserRole;
+      /** Presente quando o JWT já tem o claim; senão requireAuth resolve via DB. */
+      role?: UserRole;
     };
   }
 

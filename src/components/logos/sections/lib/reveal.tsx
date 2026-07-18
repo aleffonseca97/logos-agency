@@ -1,6 +1,8 @@
 "use client";
 
-import { m, useReducedMotion } from "framer-motion";
+import { m } from "framer-motion";
+
+import { useSafeReducedMotion } from "@/hooks/use-safe-reduced-motion";
 
 import { fadeUp, stagger, viewport } from "./motion";
 
@@ -10,7 +12,7 @@ type RevealGroupProps = {
 };
 
 export function RevealGroup({ children, className }: RevealGroupProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
 
   if (reduceMotion) {
     return <div className={className}>{children}</div>;
@@ -35,7 +37,7 @@ type RevealItemProps = {
 };
 
 export function RevealItem({ children, className }: RevealItemProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
 
   if (reduceMotion) {
     return <div className={className}>{children}</div>;
@@ -52,7 +54,7 @@ type RevealProps = RevealItemProps;
 
 /** Elemento único com animação de entrada. */
 export function Reveal({ children, className }: RevealProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
 
   if (reduceMotion) {
     return <div className={className}>{children}</div>;

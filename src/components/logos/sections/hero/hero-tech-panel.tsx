@@ -1,12 +1,13 @@
 "use client";
 
-import { m, useReducedMotion } from "framer-motion";
+import { m } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 import {
   HERO_VISUAL_STAT_KEYS,
   HERO_VISUAL_STAT_VALUES,
 } from "@/data/home-content";
+import { useSafeReducedMotion } from "@/hooks/use-safe-reduced-motion";
 import { cn } from "@/lib/utils";
 
 const bars = [
@@ -21,7 +22,7 @@ const bars = [
 
 export function HeroTechPanel({ className }: { className?: string }) {
   const t = useTranslations("hero.visual");
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
 
   return (
     <div className={cn("w-full space-y-5", className)}>

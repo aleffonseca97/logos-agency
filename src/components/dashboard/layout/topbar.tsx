@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Bell, Menu, Moon, Sun } from "lucide-react";
 
@@ -14,8 +15,13 @@ type TopbarProps = {
 
 export function DashboardTopbar({ onMenuClick }: TopbarProps) {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const { unreadCount, notifications, markRead, markAllRead } =
     useNotifications();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <header className="border-logos-border bg-logos-bg/60 sticky top-0 z-30 flex h-16 items-center gap-4 border-b px-4 backdrop-blur-xl sm:px-6">
@@ -42,10 +48,14 @@ export function DashboardTopbar({ onMenuClick }: TopbarProps) {
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           aria-label="Alternar tema"
         >
-          {theme === "dark" ? (
-            <Sun className="size-4" aria-hidden />
+          {mounted ? (
+            theme === "dark" ? (
+              <Sun className="size-4" aria-hidden />
+            ) : (
+              <Moon className="size-4" aria-hidden />
+            )
           ) : (
-            <Moon className="size-4" aria-hidden />
+            <span className="size-4" aria-hidden />
           )}
         </Button>
 

@@ -1,13 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { m, useReducedMotion } from "framer-motion";
+import { m } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 import { ContactScrollButton } from "@/components/contact";
 import { Logo } from "@/components/ui/Logo";
 import { sectionFadeUp, sectionStagger } from "@/config/motion";
 import { HERO_STAT_KEYS } from "@/data/home-content";
+import { useSafeReducedMotion } from "@/hooks/use-safe-reduced-motion";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +41,7 @@ export type HeroSectionProps = {
 
 export function HeroSection({ className }: HeroSectionProps) {
   const t = useTranslations("hero");
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useSafeReducedMotion();
   const MotionDiv = reduceMotion ? "div" : m.div;
 
   return (
