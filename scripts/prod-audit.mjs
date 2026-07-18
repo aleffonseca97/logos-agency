@@ -195,7 +195,7 @@ async function main() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         company: `Audit Co ${Date.now()}`,
-        status: "Ativo",
+        status: "ativo",
         featured_home: false,
         display_order: 0,
         city: "Milão",
