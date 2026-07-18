@@ -21,7 +21,4 @@ export const fontWordmark = Michroma({
   weight: ["400"],
 });
 
-/** @deprecated Use fontBody — mantido para compatibilidade com Shadcn */
-export const fontSans = fontBody;
-
 export const fontVariables = `${fontHeading.variable} ${fontBody.variable} ${fontWordmark.variable}`;

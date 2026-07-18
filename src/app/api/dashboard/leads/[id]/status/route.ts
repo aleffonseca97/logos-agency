@@ -1,8 +1,11 @@
-import { NextResponse } from "next/server";
-
 import { requireAuth } from "@/lib/auth";
+import {
+  handleRouteError,
+  jsonOk,
+  parseJsonBody,
+} from "@/lib/api/http";
 import { updateLeadsStatus } from "@/repositories/leads.repository";
-import { LEAD_PIPELINE, type LeadPipelineStatus } from "@/types/lead";
+import { leadStatusSchema } from "@/lib/validators/dashboard";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -11,25 +14,18 @@ export async function PATCH(request: Request, context: RouteContext) {
   if (error) return error;
 
   const { id } = await context.params;
-  const { status } = await request.json();
 
-  if (
-    !status ||
-    typeof status !== "string" ||
-    !LEAD_PIPELINE.includes(status as LeadPipelineStatus)
-  ) {
-    return NextResponse.json({ error: "Status inválido." }, { status: 400 });
-  }
+  const parsed = await parseJsonBody(request, leadStatusSchema);
+  if ("response" in parsed) return parsed.response;
 
   try {
-    const lead = await updateLeadsStatus(
-      id,
-      status as LeadPipelineStatus,
-      user!.id,
-    );
-    return NextResponse.json(lead);
+    const lead = await updateLeadsStatus(id, parsed.data.status, user!.id);
+    return jsonOk(lead);
   } catch (e) {
-    console.error("[api/dashboard/leads/[id]/status]", e);
-    return NextResponse.json({ error: "Erro ao atualizar status." }, { status: 500 });
+    return handleRouteError(
+      "[api/dashboard/leads/[id]/status]",
+      e,
+      "Erro ao atualizar status.",
+    );
   }
 }

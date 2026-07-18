@@ -1,48 +1,42 @@
-import { NextResponse } from "next/server";
-
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, requireRole } from "@/lib/auth";
+import {
+  handleRouteError,
+  jsonOk,
+  parseJsonBody,
+} from "@/lib/api/http";
 import {
   getOrgSettings,
   updateOrgSettings,
-  getProfile,
-  updateProfile,
-} from "@/repositories/settings.repository";
+} from "@/repositories/org-settings.repository";
+import { orgSettingsUpdateSchema } from "@/lib/validators/dashboard";
 
-export async function GET(request: Request) {
-  const { user, error } = await requireAuth();
+export async function GET() {
+  const { error } = await requireAuth();
   if (error) return error;
 
-  const type = new URL(request.url).searchParams.get("type");
-
   try {
-    if (type === "profile") {
-      const profile = await getProfile(user!.id);
-      return NextResponse.json(profile);
-    }
-
     const settings = await getOrgSettings();
-    return NextResponse.json(settings);
-  } catch {
-    return NextResponse.json({ error: "Erro ao carregar configurações." }, { status: 500 });
+    return jsonOk(settings);
+  } catch (e) {
+    return handleRouteError(
+      "[api/dashboard/settings]",
+      e,
+      "Erro ao carregar configurações.",
+    );
   }
 }
 
 export async function PATCH(request: Request) {
-  const { user, error } = await requireAuth();
+  const { error } = await requireRole("admin");
   if (error) return error;
 
-  const body = await request.json();
-  const type = new URL(request.url).searchParams.get("type");
+  const parsed = await parseJsonBody(request, orgSettingsUpdateSchema);
+  if ("response" in parsed) return parsed.response;
 
   try {
-    if (type === "profile") {
-      const profile = await updateProfile(user!.id, body);
-      return NextResponse.json(profile);
-    }
-
-    const settings = await updateOrgSettings(body);
-    return NextResponse.json(settings);
-  } catch {
-    return NextResponse.json({ error: "Erro ao salvar." }, { status: 500 });
+    const settings = await updateOrgSettings(parsed.data);
+    return jsonOk(settings);
+  } catch (e) {
+    return handleRouteError("[api/dashboard/settings PATCH]", e, "Erro ao salvar.");
   }
 }

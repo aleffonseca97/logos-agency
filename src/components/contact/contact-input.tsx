@@ -5,6 +5,7 @@ import { forwardRef, useId, useState } from "react";
 
 import { Input } from "@/components/logos/input";
 import { Textarea } from "@/components/logos/textarea";
+import { getFieldAriaProps } from "@/components/logos/lib/form-field";
 import { cn } from "@/lib/utils";
 
 type ContactFieldBaseProps = {
@@ -145,8 +146,10 @@ export const ContactSelect = forwardRef<HTMLSelectElement, ContactSelectProps>(
           <select
             ref={ref}
             id={id}
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? errorId : undefined}
+            {...getFieldAriaProps({
+              invalid: Boolean(error),
+              errorId: error ? errorId : undefined,
+            })}
             className={cn(
               "logos-font-body relative z-10 h-12 w-full min-w-0 appearance-none rounded-lg border bg-logos-surface px-4 text-sm text-logos-text transition-all duration-200 outline-none",
               "hover:border-brand-primary/30 focus-visible:border-brand-primary focus-visible:ring-3 focus-visible:ring-brand-primary/20",

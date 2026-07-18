@@ -1,3 +1,8 @@
+function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function scrollToSection(
   sectionId: string,
   options?: ScrollIntoViewOptions,
@@ -6,7 +11,7 @@ export function scrollToSection(
   if (!element) return;
 
   element.scrollIntoView({
-    behavior: "smooth",
+    behavior: prefersReducedMotion() ? "auto" : "smooth",
     block: "start",
     ...options,
   });

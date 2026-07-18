@@ -24,13 +24,6 @@ export function getDb() {
   return dbInstance;
 }
 
-/** @deprecated Use getDb() — mantido para compatibilidade durante migração */
-export const db = new Proxy({} as ReturnType<typeof drizzle<typeof schema>>, {
-  get(_target, prop) {
-    return Reflect.get(getDb(), prop);
-  },
-});
-
 export function isDatabaseConfigured(): boolean {
   return Boolean(process.env.DATABASE_URL);
 }

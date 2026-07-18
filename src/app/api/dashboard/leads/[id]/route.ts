@@ -1,12 +1,17 @@
-import { NextResponse } from "next/server";
-
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, requireRole } from "@/lib/auth";
+import {
+  handleRouteError,
+  jsonError,
+  jsonOk,
+  parseJsonBody,
+} from "@/lib/api/http";
 import {
   findLeadActivities,
   findLeadById,
   updateLead,
   deleteLead,
 } from "@/repositories/leads.repository";
+import { leadUpdateSchema } from "@/lib/validators/dashboard";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -23,13 +28,12 @@ export async function GET(_request: Request, context: RouteContext) {
     ]);
 
     if (!lead) {
-      return NextResponse.json({ error: "Lead não encontrado." }, { status: 404 });
+      return jsonError("Lead não encontrado.", 404);
     }
 
-    return NextResponse.json({ lead, activities });
+    return jsonOk({ lead, activities });
   } catch (e) {
-    console.error("[api/dashboard/leads/[id]]", e);
-    return NextResponse.json({ error: "Erro ao carregar lead." }, { status: 500 });
+    return handleRouteError("[api/dashboard/leads/[id]]", e, "Erro ao carregar lead.");
   }
 }
 
@@ -38,28 +42,36 @@ export async function PATCH(request: Request, context: RouteContext) {
   if (error) return error;
 
   const { id } = await context.params;
-  const body = await request.json();
+
+  const parsed = await parseJsonBody(request, leadUpdateSchema);
+  if ("response" in parsed) return parsed.response;
 
   try {
-    const lead = await updateLead(id, body);
-    return NextResponse.json(lead);
+    const lead = await updateLead(id, parsed.data);
+    return jsonOk(lead);
   } catch (e) {
-    console.error("[api/dashboard/leads/[id] PATCH]", e);
-    return NextResponse.json({ error: "Erro ao atualizar lead." }, { status: 500 });
+    return handleRouteError(
+      "[api/dashboard/leads/[id] PATCH]",
+      e,
+      "Erro ao atualizar lead.",
+    );
   }
 }
 
 export async function DELETE(_request: Request, context: RouteContext) {
-  const { error } = await requireAuth();
+  const { error } = await requireRole("admin");
   if (error) return error;
 
   const { id } = await context.params;
 
   try {
     await deleteLead(id);
-    return NextResponse.json({ success: true });
+    return jsonOk({ success: true });
   } catch (e) {
-    console.error("[api/dashboard/leads/[id] DELETE]", e);
-    return NextResponse.json({ error: "Erro ao excluir lead." }, { status: 500 });
+    return handleRouteError(
+      "[api/dashboard/leads/[id] DELETE]",
+      e,
+      "Erro ao excluir lead.",
+    );
   }
 }

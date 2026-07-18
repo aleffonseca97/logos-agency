@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 import {
@@ -21,6 +21,7 @@ const bars = [
 
 export function HeroTechPanel({ className }: { className?: string }) {
   const t = useTranslations("hero.visual");
+  const reduceMotion = useReducedMotion();
 
   return (
     <div className={cn("w-full space-y-5", className)}>
@@ -35,8 +36,8 @@ export function HeroTechPanel({ className }: { className?: string }) {
         </div>
         <m.div
           className="flex size-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.6)]"
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          animate={reduceMotion ? undefined : { opacity: [0.55, 1, 0.55] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
@@ -45,16 +46,21 @@ export function HeroTechPanel({ className }: { className?: string }) {
           <m.div
             key={index}
             className="from-brand-primary/20 to-brand-primary w-full rounded-sm bg-gradient-to-t"
-            initial={{ height: "20%" }}
-            animate={{
-              height: [
-                `${bar.height * 0.5}%`,
-                `${bar.height}%`,
-                `${bar.height * 0.7}%`,
-              ],
-            }}
+            initial={reduceMotion ? false : { height: "20%" }}
+            style={reduceMotion ? { height: `${bar.height}%` } : undefined}
+            animate={
+              reduceMotion
+                ? undefined
+                : {
+                    height: [
+                      `${bar.height * 0.55}%`,
+                      `${bar.height}%`,
+                      `${bar.height * 0.72}%`,
+                    ],
+                  }
+            }
             transition={{
-              duration: 3 + bar.delay,
+              duration: 3.6 + bar.delay,
               repeat: Infinity,
               ease: "easeInOut",
               delay: bar.delay,
@@ -73,9 +79,17 @@ export function HeroTechPanel({ className }: { className?: string }) {
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
-          initial={{ pathLength: 0, opacity: 0.3 }}
-          animate={{ pathLength: 1, opacity: [0.3, 0.8, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          initial={false}
+          animate={
+            reduceMotion
+              ? { pathLength: 1, opacity: 0.55 }
+              : { pathLength: 1, opacity: [0.35, 0.7, 0.35] }
+          }
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : { duration: 4.5, repeat: Infinity, ease: "easeInOut" }
+          }
         />
         <m.path
           d="M0 70 Q60 50, 120 55 T240 40"
@@ -83,14 +97,22 @@ export function HeroTechPanel({ className }: { className?: string }) {
           stroke="currentColor"
           strokeWidth="1"
           strokeOpacity="0.5"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1, opacity: [0.2, 0.5, 0.2] }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
+          initial={false}
+          animate={
+            reduceMotion
+              ? { pathLength: 1, opacity: 0.35 }
+              : { pathLength: 1, opacity: [0.2, 0.45, 0.2] }
+          }
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : {
+                  duration: 5.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.5,
+                }
+          }
         />
         {[
           [80, 45],
@@ -103,8 +125,16 @@ export function HeroTechPanel({ className }: { className?: string }) {
             cy={cy}
             r="3"
             fill="var(--logos-brand-primary)"
-            animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.3, 1] }}
-            transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.4 }}
+            animate={
+              reduceMotion
+                ? { opacity: 0.7, scale: 1 }
+                : { opacity: [0.45, 1, 0.45], scale: [1, 1.2, 1] }
+            }
+            transition={
+              reduceMotion
+                ? { duration: 0 }
+                : { duration: 2.8, repeat: Infinity, delay: i * 0.4 }
+            }
           />
         ))}
       </svg>

@@ -1,8 +1,20 @@
+/**
+ * Re-export do Design System LOGOS.
+ * Preferir `@/design-system` em código novo.
+ */
 export {
-  applyThemeToElement,
-  createThemeCssVars,
-  getTheme,
-  themes,
   tokens,
+  themes,
+  brandColors,
+  colorTokens,
+  spacing,
+  motionTransitions,
+  motionVariants,
 } from "@/design-system";
-export type { BrandColors, LogosTheme, ThemeId } from "@/design-system";
+export type {
+  BrandColors,
+  BrandColorKey,
+  LogosTheme,
+  ThemeId,
+  LogosTokens,
+} from "@/design-system";

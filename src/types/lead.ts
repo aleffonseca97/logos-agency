@@ -10,7 +10,6 @@ export const LEAD_PIPELINE = [
 
 export type LeadPipelineStatus = (typeof LEAD_PIPELINE)[number];
 
-/** @deprecated Use LEAD_PIPELINE — mantido para compatibilidade */
 export const LEAD_STATUS = {
   NOVO: "Novo",
   CONTATO_FEITO: "Contato feito",
@@ -19,9 +18,19 @@ export const LEAD_STATUS = {
   NEGOCIACAO: "Negociação",
   FECHADO: "Fechado",
   PERDIDO: "Perdido",
-} as const;
+} as const satisfies Record<string, LeadPipelineStatus>;
 
 export type LeadStatus = LeadPipelineStatus;
+
+export const LEAD_ACTIVITY_TYPES = [
+  "note",
+  "call",
+  "email",
+  "meeting",
+  "status_change",
+] as const;
+
+export type LeadActivityType = (typeof LEAD_ACTIVITY_TYPES)[number];
 
 export type LeadSource = "website" | "referral" | "social" | "other";
 
@@ -54,7 +63,7 @@ export type LeadRow = Lead;
 export type LeadActivity = {
   id: string;
   lead_id: string;
-  type: string;
+  type: LeadActivityType;
   content: string;
   created_by: string | null;
   created_at: string;

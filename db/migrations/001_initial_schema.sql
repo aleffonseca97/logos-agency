@@ -35,7 +35,15 @@ create table if not exists leads (
   budget text not null,
   message text not null,
   status text not null default 'Novo'
-    check (status in ('Novo', 'Em contato', 'Qualificado', 'Fechado', 'Perdido')),
+    check (status in (
+      'Novo',
+      'Contato feito',
+      'Reunião marcada',
+      'Proposta enviada',
+      'Negociação',
+      'Fechado',
+      'Perdido'
+    )),
   source text not null default 'website',
   ip text,
   user_agent text,

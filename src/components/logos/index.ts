@@ -5,7 +5,6 @@ export { Section, sectionVariants } from "./section";
 // ── Actions ──
 export { Button, logosButtonVariants } from "./button";
 export { CtaButton } from "./cta-button";
-export { GlowButton } from "./glow-button";
 
 // ── Display ──
 export { Badge, logosBadgeVariants } from "./badge";

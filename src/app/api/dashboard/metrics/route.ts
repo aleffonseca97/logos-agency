@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server";
-
 import { requireAuth } from "@/lib/auth";
-import { getDashboardMetrics } from "@/repositories/dashboard.repository";
+import { handleRouteError, jsonOk } from "@/lib/api/http";
+import { getDashboardMetrics } from "@/repositories/metrics.repository";
 
 export async function GET() {
   const { error } = await requireAuth();
@@ -9,12 +8,12 @@ export async function GET() {
 
   try {
     const metrics = await getDashboardMetrics();
-    return NextResponse.json(metrics);
+    return jsonOk(metrics);
   } catch (e) {
-    console.error("[api/dashboard/metrics]", e);
-    return NextResponse.json(
-      { error: "Erro ao carregar métricas." },
-      { status: 500 },
+    return handleRouteError(
+      "[api/dashboard/metrics]",
+      e,
+      "Erro ao carregar métricas.",
     );
   }
 }

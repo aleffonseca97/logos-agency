@@ -29,7 +29,7 @@ export function TechnologiesSection() {
       <Reveal>
         <Card variant="glass" padding="lg" className="mx-auto max-w-4xl">
           <CardContent>
-            <RevealGroup className="flex flex-wrap justify-center gap-2 sm:gap-3">
+            <RevealGroup className="flex flex-wrap justify-center gap-2.5 sm:gap-3 md:gap-3.5">
               {homeTechnologies.map((tech) => (
                 <RevealItem key={tech}>
                   <Badge variant="outline" size="lg" className="px-4 py-1.5">

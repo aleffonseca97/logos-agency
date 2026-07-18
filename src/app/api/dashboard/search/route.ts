@@ -1,22 +1,27 @@
-import { NextResponse, type NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 import { requireAuth } from "@/lib/auth";
-import { globalSearch } from "@/repositories/dashboard.repository";
+import { handleRouteError, jsonOk } from "@/lib/api/http";
+import { globalSearch } from "@/repositories/search.repository";
+import { searchQuerySchema } from "@/lib/validators/dashboard";
 
 export async function GET(request: NextRequest) {
   const { error } = await requireAuth();
   if (error) return error;
 
-  const q = request.nextUrl.searchParams.get("q")?.trim();
+  const parsed = searchQuerySchema.safeParse({
+    q: request.nextUrl.searchParams.get("q") ?? "",
+  });
+
+  const q = parsed.success ? parsed.data.q.trim() : "";
   if (!q || q.length < 2) {
-    return NextResponse.json({ leads: [], clients: [], projects: [], proposals: [] });
+    return jsonOk({ leads: [], clients: [], projects: [], proposals: [] });
   }
 
   try {
     const results = await globalSearch(q);
-    return NextResponse.json(results);
+    return jsonOk(results);
   } catch (e) {
-    console.error("[api/dashboard/search]", e);
-    return NextResponse.json({ error: "Erro na busca." }, { status: 500 });
+    return handleRouteError("[api/dashboard/search]", e, "Erro na busca.");
   }
 }

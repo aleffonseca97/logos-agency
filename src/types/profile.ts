@@ -1,9 +1,11 @@
+export type UserRole = "admin" | "member";
+
 export type Profile = {
   id: string;
   full_name: string | null;
   avatar_url: string | null;
   email: string | null;
-  role: "admin" | "member";
+  role: UserRole;
   preferences: Record<string, unknown>;
   created_at: string;
   updated_at: string;

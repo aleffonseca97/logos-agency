@@ -17,7 +17,13 @@ export function SectionShell({
   ...props
 }: SectionShellProps) {
   return (
-    <Section className={cn("relative overflow-hidden", className)} {...props}>
+    <Section
+      className={cn(
+        "relative scroll-mt-24 overflow-hidden sm:scroll-mt-28 lg:scroll-mt-32",
+        className,
+      )}
+      {...props}
+    >
       {effects}
       <Container className="relative space-y-12 lg:space-y-16">
         {children}

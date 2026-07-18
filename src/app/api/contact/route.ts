@@ -1,9 +1,11 @@
-import { NextResponse } from "next/server";
-
-import { checkRateLimit, pruneRateLimitStore } from "@/lib/rate-limit";
+import {
+  checkRateLimit,
+  pruneRateLimitStore,
+} from "@/lib/rate-limit";
 import { getClientIp, getUserAgent } from "@/lib/request-meta";
 import { isResendConfigured } from "@/lib/resend";
 import { isDatabaseConfigured } from "@/lib/db";
+import { jsonError, jsonOk } from "@/lib/api/http";
 import {
   createContactFormSchema,
   isFormSubmittedTooFast,
@@ -27,14 +29,6 @@ const contactSchema = createContactFormSchema({
   messageMin: "Message must be at least 10 characters.",
   messageMax: "Message is too long.",
 });
-
-function jsonError(
-  message: string,
-  status: number,
-  extra?: Record<string, unknown>,
-) {
-  return NextResponse.json({ error: message, ...extra }, { status });
-}
 
 export async function POST(request: Request) {
   pruneRateLimitStore();
@@ -118,7 +112,7 @@ export async function POST(request: Request) {
       console.error("[api/contact] notification error:", notifError);
     }
 
-    return NextResponse.json({ success: true, id: lead.id });
+    return jsonOk({ success: true, id: lead.id });
   } catch (error) {
     if (error instanceof LeadServiceError) {
       const status = error.code === "DUPLICATE" ? 409 : 500;

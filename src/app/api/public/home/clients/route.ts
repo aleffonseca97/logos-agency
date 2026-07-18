@@ -1,5 +1,4 @@
-import { NextResponse } from "next/server";
-
+import { jsonError, jsonOk } from "@/lib/api/http";
 import { findHomeFeaturedClients } from "@/repositories/home-clients.repository";
 
 export const runtime = "nodejs";
@@ -11,10 +10,9 @@ export async function GET() {
   try {
     const clients = await findHomeFeaturedClients();
 
-    return NextResponse.json(
+    return jsonOk(
       { clients },
       {
-        status: 200,
         headers: {
           "Cache-Control": CACHE_CONTROL,
         },
@@ -22,9 +20,6 @@ export async function GET() {
     );
   } catch (error) {
     console.error("[api/public/home/clients]", error);
-    return NextResponse.json(
-      { error: "Erro ao carregar clientes.", clients: [] },
-      { status: 500 },
-    );
+    return jsonError("Erro ao carregar clientes.", 500, { clients: [] });
   }
 }

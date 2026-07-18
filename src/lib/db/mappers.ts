@@ -63,7 +63,7 @@ export function mapLeadActivity(row: typeof leadActivities.$inferSelect): LeadAc
   return {
     id: row.id,
     lead_id: row.leadId,
-    type: row.type,
+    type: row.type as LeadActivity["type"],
     content: row.content,
     created_by: row.createdBy,
     created_at: toIso(row.createdAt),
@@ -101,7 +101,7 @@ export function mapProject(row: typeof projects.$inferSelect): Project {
     lead_id: row.leadId,
     name: row.name,
     description: row.description,
-    status: row.status,
+    status: row.status as Project["status"],
     budget: toNumber(row.budget),
     started_at: toIsoOrNull(row.startedAt),
     completed_at: toIsoOrNull(row.completedAt),

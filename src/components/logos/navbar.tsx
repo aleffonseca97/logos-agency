@@ -91,7 +91,10 @@ function NavbarLink({
       data-slot="logos-navbar-link"
       aria-current={active ? "page" : undefined}
       className={cn(
-        "logos-font-body text-logos-text-muted hover:text-logos-text rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 aria-[current=page]:text-logos-text lg:px-3.5",
+        "logos-font-body text-logos-text-muted hover:text-logos-text rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+        "aria-[current=page]:bg-logos-surface/50 aria-[current=page]:text-logos-text",
+        "lg:px-3.5",
         className,
       )}
       {...props}

@@ -1,6 +1,14 @@
+/**
+ * LOGOS Design System — Typography
+ *
+ * Families: Sora (heading), Inter (body), Michroma (wordmark).
+ * Carregadas em `src/config/fonts.ts` → CSS vars no `<html>`.
+ */
+
 export const fontFamily = {
   heading: "var(--font-heading)",
   body: "var(--font-body)",
+  wordmark: "var(--font-wordmark)",
 } as const;
 
 export const fontWeight = {
@@ -125,4 +133,42 @@ export const typographyPresets = {
     letterSpacing: letterSpacing.widest,
     fontWeight: fontWeight.medium,
   },
+  wordmark: {
+    fontFamily: fontFamily.wordmark,
+    fontSize: fontSize.h4,
+    lineHeight: lineHeight.none,
+    letterSpacing: letterSpacing.wider,
+    fontWeight: fontWeight.regular,
+  },
+} as const;
+
+/** Classes utilitárias LOGOS para tipografia. */
+export const typographyClasses = {
+  font: {
+    heading: "logos-font-heading",
+    body: "logos-font-body",
+    wordmark: "logos-font-wordmark",
+  },
+  display: {
+    "2xl": "logos-text-display-2xl",
+    xl: "logos-text-display-xl",
+    lg: "logos-text-display-lg",
+    md: "logos-text-display-md",
+    sm: "logos-text-display-sm",
+  },
+  heading: {
+    h1: "logos-text-h1",
+    h2: "logos-text-h2",
+    h3: "logos-text-h3",
+    h4: "logos-text-h4",
+    h5: "logos-text-h5",
+    h6: "logos-text-h6",
+  },
+  body: {
+    lg: "logos-text-body-lg",
+    default: "logos-text-body",
+    sm: "logos-text-body-sm",
+  },
+  caption: "logos-text-caption",
+  overline: "logos-text-overline",
 } as const;

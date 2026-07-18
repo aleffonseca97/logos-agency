@@ -1,4 +1,8 @@
-/** Escala de espaçamento — base 4px (0.25rem) */
+/**
+ * LOGOS Design System — Spacing
+ * Escala base 4px (0.25rem). Espelha `src/styles/tokens.css`.
+ */
+
 export const spacing = {
   0: "0",
   px: "1px",
@@ -37,6 +41,9 @@ export const spacing = {
   96: "24rem",
 } as const;
 
+export type SpacingKey = keyof typeof spacing;
+
+/** Referências CSS (`var(--logos-space-*)`). */
 export const spacingTokens = {
   0: "var(--logos-space-0)",
   px: "var(--logos-space-px)",
@@ -73,4 +80,23 @@ export const spacingTokens = {
   72: "var(--logos-space-72)",
   80: "var(--logos-space-80)",
   96: "var(--logos-space-96)",
+} as const;
+
+/** Espaçamento semântico de layout (padrões de produto). */
+export const layoutSpacing = {
+  sectionY: { mobile: spacing[16], desktop: spacing[24] },
+  sectionGap: spacing[12],
+  stackSm: spacing[2],
+  stackMd: spacing[4],
+  stackLg: spacing[6],
+  inlineSm: spacing[2],
+  inlineMd: spacing[3],
+  inlineLg: spacing[4],
+  pagePadding: {
+    mobile: spacing[4],
+    tablet: spacing[6],
+    desktop: spacing[8],
+  },
+  dashboardSidebarExpanded: "16rem",
+  dashboardSidebarCollapsed: "4.5rem",
 } as const;

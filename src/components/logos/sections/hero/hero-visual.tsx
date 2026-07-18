@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 import {
@@ -23,23 +23,28 @@ import { HeroTechPanel } from "./hero-tech-panel";
 
 export function HeroVisual() {
   const t = useTranslations("hero.visual");
+  const reduceMotion = useReducedMotion();
 
   return (
     <m.div
       className="relative w-full"
-      initial={{ opacity: 0, scale: 0.96, y: 24 }}
+      initial={reduceMotion ? false : { opacity: 0, scale: 0.96, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1], delay: 0.2 }}
+      transition={
+        reduceMotion
+          ? { duration: 0 }
+          : { duration: 0.85, ease: [0.25, 0.1, 0.25, 1], delay: 0.15 }
+      }
     >
       <MouseGlow intensity="subtle" className="rounded-2xl">
-        <GlowBorder intensity="medium" borderRadius="1rem">
+        <GlowBorder intensity="subtle" borderRadius="1rem">
           <div className="bg-brand-background relative aspect-[4/5] min-h-[280px] w-full overflow-hidden rounded-2xl sm:aspect-square sm:min-h-[340px] lg:min-h-[520px]">
             <AnimatedGradient intensity="subtle" />
             <AuroraBackground intensity="subtle" />
             <AnimatedBackground intensity="subtle" />
             <LightRays intensity="subtle" />
             <AnimatedGrid intensity="subtle" />
-            <Particles intensity="medium" />
+            <Particles intensity="subtle" />
             <FloatingShapes intensity="subtle" />
             <Spotlight intensity="subtle" x={50} y={20} />
             <BackgroundBlur intensity="subtle" fade="edges" />
@@ -49,14 +54,14 @@ export function HeroVisual() {
             <div className="absolute inset-0 flex items-center justify-center p-5 sm:p-8">
               <m.div
                 className="w-full max-w-[280px] sm:max-w-xs"
-                animate={{ y: [0, -8, 0] }}
+                animate={reduceMotion ? undefined : { y: [0, -5, 0] }}
                 transition={{
-                  duration: 6,
+                  duration: 7,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
               >
-                <GradientBorder intensity="medium" borderRadius="0.875rem">
+                <GradientBorder intensity="subtle" borderRadius="0.875rem">
                   <div className="logos-glass-strong rounded-xl p-5 sm:p-6">
                     <HeroTechPanel />
                   </div>
@@ -66,9 +71,9 @@ export function HeroVisual() {
 
             <m.div
               className="logos-glass border-logos-border absolute top-[12%] right-[10%] hidden rounded-lg border px-3 py-2 sm:block"
-              animate={{ y: [0, -6, 0] }}
+              animate={reduceMotion ? undefined : { y: [0, -4, 0] }}
               transition={{
-                duration: 5,
+                duration: 6.5,
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 1,
@@ -84,9 +89,9 @@ export function HeroVisual() {
 
             <m.div
               className="logos-glass border-logos-border absolute bottom-[15%] left-[8%] hidden rounded-lg border px-3 py-2 sm:block"
-              animate={{ y: [0, 6, 0] }}
+              animate={reduceMotion ? undefined : { y: [0, 4, 0] }}
               transition={{
-                duration: 7,
+                duration: 8,
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 0.5,
@@ -102,8 +107,12 @@ export function HeroVisual() {
 
             <m.div
               className="bg-brand-primary/20 absolute top-1/2 left-1/2 size-32 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-              animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              animate={
+                reduceMotion
+                  ? undefined
+                  : { scale: [1, 1.1, 1], opacity: [0.28, 0.42, 0.28] }
+              }
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               aria-hidden
             />
           </div>

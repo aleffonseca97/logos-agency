@@ -1,8 +1,10 @@
 "use client";
 
-import { m } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 
 export function HeroOrbitLines() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <svg
       className="pointer-events-none absolute inset-0 size-full"
@@ -18,8 +20,8 @@ export function HeroOrbitLines() {
         stroke="url(#orbit-gradient)"
         strokeWidth="1"
         style={{ transformOrigin: "200px 200px" }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        animate={reduceMotion ? undefined : { rotate: 360 }}
+        transition={{ duration: 48, repeat: Infinity, ease: "linear" }}
       />
       <m.ellipse
         cx="200"
@@ -31,8 +33,8 @@ export function HeroOrbitLines() {
         strokeWidth="0.5"
         strokeDasharray="4 8"
         style={{ transformOrigin: "200px 200px" }}
-        animate={{ rotate: -360 }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+        animate={reduceMotion ? undefined : { rotate: -360 }}
+        transition={{ duration: 72, repeat: Infinity, ease: "linear" }}
       />
       <m.circle
         cx="200"
@@ -40,8 +42,8 @@ export function HeroOrbitLines() {
         r="4"
         fill="var(--logos-brand-primary)"
         style={{ transformOrigin: "200px 200px" }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        animate={reduceMotion ? undefined : { rotate: 360 }}
+        transition={{ duration: 48, repeat: Infinity, ease: "linear" }}
       />
       <defs>
         <linearGradient id="orbit-gradient" x1="0%" y1="0%" x2="100%" y2="0%">

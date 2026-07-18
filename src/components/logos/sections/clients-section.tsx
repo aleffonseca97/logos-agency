@@ -119,12 +119,12 @@ export function ClientsSection() {
     [trackClients],
   );
 
-  if (status !== "ready") {
+  if (status === "empty") {
     return null;
   }
 
   return (
-    <SectionShell id={SECTION_IDS.clients} spacing="lg">
+    <SectionShell id={SECTION_IDS.clients} spacing="md">
       <SectionHeader
         badge={t("badge")}
         title={t("title")}
@@ -132,33 +132,37 @@ export function ClientsSection() {
         align="center"
       />
 
-      <Reveal>
-        <div
-          className="group/carousel @container relative overflow-hidden"
-          aria-label={t("carouselAria")}
-        >
+      {status === "loading" ? (
+        <div className="h-24 sm:h-28" aria-hidden />
+      ) : (
+        <Reveal>
           <div
-            className="from-brand-background pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r to-transparent sm:w-16"
-            aria-hidden
-          />
-          <div
-            className="from-brand-background pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l to-transparent sm:w-16"
-            aria-hidden
-          />
-
-          <ul
-            className={cn(
-              "m-0 flex w-max list-none p-0",
-              "animate-logos-clients-marquee motion-reduce:animate-none",
-              "group-hover/carousel:[animation-play-state:paused]",
-            )}
+            className="group/carousel @container relative overflow-hidden"
+            aria-label={t("carouselAria")}
           >
-            {marqueeItems.map(({ client, key }) => (
-              <ClientLogoItem key={key} client={client} />
-            ))}
-          </ul>
-        </div>
-      </Reveal>
+            <div
+              className="from-brand-background pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r to-transparent sm:w-16"
+              aria-hidden
+            />
+            <div
+              className="from-brand-background pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l to-transparent sm:w-16"
+              aria-hidden
+            />
+
+            <ul
+              className={cn(
+                "m-0 flex w-max list-none p-0",
+                "animate-logos-clients-marquee motion-reduce:animate-none",
+                "group-hover/carousel:[animation-play-state:paused]",
+              )}
+            >
+              {marqueeItems.map(({ client, key }) => (
+                <ClientLogoItem key={key} client={client} />
+              ))}
+            </ul>
+          </div>
+        </Reveal>
+      )}
     </SectionShell>
   );
 }

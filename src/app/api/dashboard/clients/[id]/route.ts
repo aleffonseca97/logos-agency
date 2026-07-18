@@ -1,13 +1,17 @@
-import { NextResponse } from "next/server";
-
-import { requireAuth } from "@/lib/auth";
+import { requireAuth, requireRole } from "@/lib/auth";
+import {
+  handleRouteError,
+  jsonError,
+  jsonOk,
+  parseJsonBody,
+} from "@/lib/api/http";
 import { invalidateHomeClientsCache } from "@/lib/cache/home-clients";
 import {
   deleteClient,
   findClientById,
   updateClient,
 } from "@/repositories/clients.repository";
-import type { ClientInsert } from "@/types/client";
+import { clientUpdateSchema } from "@/lib/validators/dashboard";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -20,54 +24,53 @@ export async function GET(_request: Request, context: RouteContext) {
   try {
     const client = await findClientById(id);
     if (!client) {
-      return NextResponse.json({ error: "Cliente não encontrado." }, { status: 404 });
+      return jsonError("Cliente não encontrado.", 404);
     }
-    return NextResponse.json(client);
+    return jsonOk(client);
   } catch (e) {
-    console.error("[api/dashboard/clients/[id]]", e);
-    return NextResponse.json({ error: "Erro ao carregar cliente." }, { status: 500 });
+    return handleRouteError("[api/dashboard/clients/[id]]", e, "Erro ao carregar cliente.");
   }
 }
 
 export async function PATCH(request: Request, context: RouteContext) {
-  const { error } = await requireAuth();
+  const { error } = await requireRole("admin");
   if (error) return error;
 
   const { id } = await context.params;
-  const body = (await request.json()) as Partial<ClientInsert>;
 
-  if (body.company !== undefined && !String(body.company).trim()) {
-    return NextResponse.json({ error: "Nome da empresa é obrigatório." }, { status: 400 });
-  }
-
-  const updates: Partial<ClientInsert> = {
-    ...body,
-    ...(body.company !== undefined && { company: String(body.company).trim() }),
-    ...(body.status !== undefined && {
-      status: body.status === "inativo" ? "inativo" : "ativo",
-    }),
-    ...(body.display_order !== undefined && {
-      display_order: Number.isFinite(Number(body.display_order))
-        ? Number(body.display_order)
-        : 0,
-    }),
-    ...(body.featured_home !== undefined && {
-      featured_home: Boolean(body.featured_home),
-    }),
-  };
+  const parsed = await parseJsonBody(request, clientUpdateSchema);
+  if ("response" in parsed) return parsed.response;
 
   try {
-    const client = await updateClient(id, updates);
+    const client = await updateClient(id, {
+      ...parsed.data,
+      ...(parsed.data.lead_id !== undefined && { lead_id: parsed.data.lead_id }),
+      ...(parsed.data.logo_url !== undefined && { logo_url: parsed.data.logo_url }),
+      ...(parsed.data.website !== undefined && { website: parsed.data.website }),
+      ...(parsed.data.segment !== undefined && { segment: parsed.data.segment }),
+      ...(parsed.data.city !== undefined && { city: parsed.data.city }),
+      ...(parsed.data.country !== undefined && { country: parsed.data.country }),
+      ...(parsed.data.client_since !== undefined && {
+        client_since: parsed.data.client_since,
+      }),
+      ...(parsed.data.notes !== undefined && { notes: parsed.data.notes }),
+      ...(parsed.data.name !== undefined && { name: parsed.data.name }),
+      ...(parsed.data.email !== undefined && { email: parsed.data.email }),
+      ...(parsed.data.phone !== undefined && { phone: parsed.data.phone }),
+    });
     invalidateHomeClientsCache();
-    return NextResponse.json(client);
+    return jsonOk(client);
   } catch (e) {
-    console.error("[api/dashboard/clients/[id] PATCH]", e);
-    return NextResponse.json({ error: "Erro ao atualizar cliente." }, { status: 500 });
+    return handleRouteError(
+      "[api/dashboard/clients/[id] PATCH]",
+      e,
+      "Erro ao atualizar cliente.",
+    );
   }
 }
 
 export async function DELETE(_request: Request, context: RouteContext) {
-  const { error } = await requireAuth();
+  const { error } = await requireRole("admin");
   if (error) return error;
 
   const { id } = await context.params;
@@ -75,9 +78,12 @@ export async function DELETE(_request: Request, context: RouteContext) {
   try {
     await deleteClient(id);
     invalidateHomeClientsCache();
-    return NextResponse.json({ success: true });
+    return jsonOk({ success: true });
   } catch (e) {
-    console.error("[api/dashboard/clients/[id] DELETE]", e);
-    return NextResponse.json({ error: "Erro ao excluir cliente." }, { status: 500 });
+    return handleRouteError(
+      "[api/dashboard/clients/[id] DELETE]",
+      e,
+      "Erro ao excluir cliente.",
+    );
   }
 }

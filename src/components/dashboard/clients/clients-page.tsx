@@ -20,7 +20,8 @@ import {
 } from "@/components/logos/modal";
 import { Textarea } from "@/components/logos/textarea";
 import { useToast } from "@/components/logos/toast";
-import type { Client, ClientInsert } from "@/types/client";
+import type { Client, ClientInsert, ClientStatus } from "@/types/client";
+import { CLIENT_STATUS } from "@/types/client";
 
 type ClientFormState = {
   company: string;
@@ -29,7 +30,7 @@ type ClientFormState = {
   segment: string;
   city: string;
   country: string;
-  status: "ativo" | "inativo";
+  status: ClientStatus;
   client_since: string;
   featured_home: boolean;
   display_order: string;
@@ -43,7 +44,7 @@ const emptyForm = (): ClientFormState => ({
   segment: "",
   city: "",
   country: "",
-  status: "ativo",
+  status: CLIENT_STATUS.ATIVO,
   client_since: new Date().toISOString().slice(0, 10),
   featured_home: false,
   display_order: "0",
@@ -281,8 +282,8 @@ export function ClientsPage() {
                     {[c.city, c.country].filter(Boolean).join(", ") || "—"}
                   </td>
                   <td className="px-4 py-3">
-                    <Badge variant={c.status === "ativo" ? "success" : "muted"}>
-                      {c.status === "ativo" ? "Ativo" : "Inativo"}
+                    <Badge variant={c.status === CLIENT_STATUS.ATIVO ? "success" : "muted"}>
+                      {c.status === CLIENT_STATUS.ATIVO ? "Ativo" : "Inativo"}
                     </Badge>
                   </td>
                   <td className="text-logos-text-muted px-4 py-3">
@@ -426,8 +427,8 @@ export function ClientsPage() {
                 }
                 className="border-logos-border bg-logos-surface text-logos-text focus:border-brand-primary focus:ring-brand-primary/20 h-10 w-full rounded-lg border px-3 text-sm outline-none focus:ring-2"
               >
-                <option value="ativo">Ativo</option>
-                <option value="inativo">Inativo</option>
+                <option value={CLIENT_STATUS.ATIVO}>Ativo</option>
+                <option value={CLIENT_STATUS.INATIVO}>Inativo</option>
               </select>
             </Field>
 

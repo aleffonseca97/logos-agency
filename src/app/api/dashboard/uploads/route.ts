@@ -1,21 +1,22 @@
 import { mkdir, writeFile } from "fs/promises";
-import { NextResponse } from "next/server";
 import path from "path";
 import { randomUUID } from "crypto";
+import { z } from "zod";
 
-import { requireAuth } from "@/lib/auth";
+import { requireRole } from "@/lib/auth";
+import { handleRouteError, jsonError, jsonOk } from "@/lib/api/http";
 
-const ALLOWED_TYPES = new Set([
+const ALLOWED_TYPES = [
   "image/jpeg",
   "image/png",
   "image/webp",
   "image/svg+xml",
   "image/gif",
-]);
+] as const;
 
 const MAX_BYTES = 2 * 1024 * 1024;
 
-const EXT_BY_TYPE: Record<string, string> = {
+const EXT_BY_TYPE: Record<(typeof ALLOWED_TYPES)[number], string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
   "image/webp": "webp",
@@ -23,8 +24,13 @@ const EXT_BY_TYPE: Record<string, string> = {
   "image/gif": "gif",
 };
 
+const uploadMetaSchema = z.object({
+  type: z.enum(ALLOWED_TYPES),
+  size: z.number().int().positive().max(MAX_BYTES),
+});
+
 export async function POST(request: Request) {
-  const { error } = await requireAuth();
+  const { error } = await requireRole("admin");
   if (error) return error;
 
   try {
@@ -32,24 +38,25 @@ export async function POST(request: Request) {
     const file = formData.get("file");
 
     if (!(file instanceof File)) {
-      return NextResponse.json({ error: "Arquivo não enviado." }, { status: 400 });
+      return jsonError("Arquivo não enviado.", 400);
     }
 
-    if (!ALLOWED_TYPES.has(file.type)) {
-      return NextResponse.json(
-        { error: "Formato inválido. Use JPG, PNG, WEBP, SVG ou GIF." },
-        { status: 400 },
+    const meta = uploadMetaSchema.safeParse({
+      type: file.type,
+      size: file.size,
+    });
+
+    if (!meta.success) {
+      if (file.size > MAX_BYTES) {
+        return jsonError("Arquivo muito grande. Máximo 2MB.", 400);
+      }
+      return jsonError(
+        "Formato inválido. Use JPG, PNG, WEBP, SVG ou GIF.",
+        400,
       );
     }
 
-    if (file.size > MAX_BYTES) {
-      return NextResponse.json(
-        { error: "Arquivo muito grande. Máximo 2MB." },
-        { status: 400 },
-      );
-    }
-
-    const ext = EXT_BY_TYPE[file.type] ?? "bin";
+    const ext = EXT_BY_TYPE[meta.data.type];
     const filename = `${randomUUID()}.${ext}`;
     const uploadDir = path.join(process.cwd(), "public", "uploads", "clients");
     await mkdir(uploadDir, { recursive: true });
@@ -57,10 +64,8 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(await file.arrayBuffer());
     await writeFile(path.join(uploadDir, filename), buffer);
 
-    const url = `/uploads/clients/${filename}`;
-    return NextResponse.json({ url });
+    return jsonOk({ url: `/uploads/clients/${filename}` });
   } catch (e) {
-    console.error("[api/dashboard/uploads]", e);
-    return NextResponse.json({ error: "Erro ao enviar arquivo." }, { status: 500 });
+    return handleRouteError("[api/dashboard/uploads]", e, "Erro ao enviar arquivo.");
   }
 }

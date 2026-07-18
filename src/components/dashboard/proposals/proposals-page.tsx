@@ -15,6 +15,7 @@ import { useToast } from "@/components/logos/toast";
 import { branding } from "@/config/branding";
 import { siteConfig } from "@/config/site";
 import { formatCurrency, formatDate } from "@/utils/export";
+import { PROPOSAL_STATUSES } from "@/types/proposal";
 
 export function ProposalsPage() {
   const [showForm, setShowForm] = useState(false);
@@ -172,7 +173,7 @@ function ProposalForm({
               value: Number(value),
               description,
               deadline: deadline || null,
-              status: "Rascunho",
+              status: PROPOSAL_STATUSES[0],
             })
           }
         >

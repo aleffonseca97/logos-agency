@@ -56,10 +56,10 @@ export function HeroSection({ className }: HeroSectionProps) {
       <NoiseLayer intensity="subtle" className="z-0" />
 
       <CursorSpotlight intensity="subtle" className="z-10 w-full">
-        <Container className="relative py-16 sm:py-20 lg:py-28">
-          <div className="grid items-center gap-12 md:grid-cols-2 md:gap-10 lg:gap-16 xl:gap-20">
+        <Container className="relative py-20 sm:py-24 lg:py-28">
+          <div className="grid items-center gap-10 md:grid-cols-2 md:gap-12 lg:gap-16 xl:gap-24">
             <MotionDiv
-              className="flex flex-col items-start gap-8"
+              className="flex flex-col items-start gap-6 sm:gap-7"
               {...(!reduceMotion && {
                 variants: sectionStagger,
                 initial: "hidden",
@@ -67,7 +67,10 @@ export function HeroSection({ className }: HeroSectionProps) {
               })}
             >
               <MotionDiv {...(!reduceMotion && { variants: sectionFadeUp })}>
-                <Badge variant="accent" className="gap-2 px-3 py-1.5">
+                <Badge
+                  variant="accent"
+                  className="gap-2 px-3 py-1.5 opacity-90"
+                >
                   <Logo variant="mark" height={16} />
                   <span className="logos-font-heading text-xs font-semibold tracking-[0.12em]">
                     {t("badge")}
@@ -76,7 +79,7 @@ export function HeroSection({ className }: HeroSectionProps) {
               </MotionDiv>
 
               <MotionDiv
-                className="space-y-6"
+                className="space-y-5"
                 {...(!reduceMotion && { variants: sectionFadeUp })}
               >
                 <h1 className="logos-text-display-lg text-logos-text sm:logos-text-display-xl lg:logos-text-display-2xl max-w-2xl text-balance text-pretty lg:max-w-3xl">
@@ -92,7 +95,7 @@ export function HeroSection({ className }: HeroSectionProps) {
               </MotionDiv>
 
               <MotionDiv
-                className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center"
+                className="flex w-full flex-col gap-3 pt-1 sm:w-auto sm:flex-row sm:items-center"
                 {...(!reduceMotion && { variants: sectionFadeUp })}
               >
                 <ContactScrollButton size="lg" className="w-full sm:w-auto">
@@ -109,12 +112,12 @@ export function HeroSection({ className }: HeroSectionProps) {
               </MotionDiv>
 
               <MotionDiv
-                className="border-logos-border flex flex-wrap items-center gap-x-4 gap-y-2 border-t pt-8 sm:gap-x-6"
+                className="border-logos-border/80 flex flex-wrap items-center gap-x-5 gap-y-2 border-t pt-7 opacity-90 sm:gap-x-7 sm:pt-8"
                 {...(!reduceMotion && { variants: sectionFadeUp })}
               >
                 {HERO_STAT_KEYS.map((key) => (
                   <div key={key} className="space-y-0.5">
-                    <p className="logos-font-heading text-logos-text text-lg font-semibold">
+                    <p className="logos-font-heading text-logos-text text-lg font-semibold tracking-tight">
                       {t(`stats.${key}.value`)}
                     </p>
                     <p className="text-logos-text-muted text-xs">
@@ -125,7 +128,7 @@ export function HeroSection({ className }: HeroSectionProps) {
               </MotionDiv>
             </MotionDiv>
 
-            <div className="relative lg:pl-4">
+            <div className="relative md:pl-2 lg:pl-4">
               <HeroVisual />
             </div>
           </div>

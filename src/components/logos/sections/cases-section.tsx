@@ -28,7 +28,7 @@ export function CasesSection() {
   return (
     <SectionShell
       id={SECTION_IDS.cases}
-      spacing="lg"
+      spacing="xl"
       variant="background"
       effects={
         <>
@@ -43,7 +43,7 @@ export function CasesSection() {
         description={t("description")}
       />
 
-      <RevealGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+      <RevealGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:gap-6 lg:grid-cols-3">
         {CASE_KEYS.map((key) => {
           const title = t(`items.${key}.title`);
 

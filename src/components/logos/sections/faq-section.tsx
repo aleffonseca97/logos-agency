@@ -17,7 +17,7 @@ export function FaqSection() {
   const t = useTranslations("faq");
 
   return (
-    <SectionShell id={SECTION_IDS.faq} spacing="lg">
+    <SectionShell id={SECTION_IDS.faq} spacing="md">
       <SectionHeader
         badge={t("badge")}
         title={t("title")}

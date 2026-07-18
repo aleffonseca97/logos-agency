@@ -32,6 +32,7 @@ async function main() {
     const migrations = [
       "001_initial_schema.sql",
       "002_clients_module.sql",
+      "003_lead_pipeline_status.sql",
     ];
 
     for (const file of migrations) {

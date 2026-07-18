@@ -16,6 +16,9 @@ export const navbarVariants = cva("w-full", {
         "[&_[data-slot=logos-navbar-inner]]:px-3",
         "[&_[data-slot=logos-navbar-inner]]:sm:px-5",
         "[&_[data-slot=logos-navbar-inner]]:lg:px-8",
+        "[&_[data-slot=logos-navbar-inner]]:transition-[box-shadow,backdrop-filter,background-color] [&_[data-slot=logos-navbar-inner]]:duration-300",
+        "[&[data-scrolled=true]_[data-slot=logos-navbar-inner]]:shadow-[0_0_0_1px_color-mix(in_srgb,var(--logos-brand-white)_6%,transparent),0_12px_40px_color-mix(in_srgb,#000000_45%,transparent),inset_0_1px_0_color-mix(in_srgb,var(--logos-brand-white)_8%,transparent)]",
+        "[&[data-scrolled=true]_[data-slot=logos-navbar-inner]]:backdrop-blur-xl",
       ].join(" "),
     },
     size: {

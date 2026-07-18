@@ -24,7 +24,7 @@ import { useToast } from "@/components/logos/toast";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { siteConfig } from "@/config/site";
 import { formatDate } from "@/utils/export";
-import type { LeadActivity } from "@/types/lead";
+import { LEAD_STATUS, type LeadActivity } from "@/types/lead";
 
 export function LeadDetailPage({
   id,
@@ -134,7 +134,7 @@ export function LeadDetailPage({
               <Calendar className="size-4" aria-hidden />
               Reunião
             </Button>
-            {lead.status === "Fechado" && (
+            {lead.status === LEAD_STATUS.FECHADO && (
               <Button size="sm" onClick={() => convertClient.mutate()} disabled={convertClient.isPending}>
                 <UserPlus className="size-4" aria-hidden />
                 Converter em cliente

@@ -12,12 +12,13 @@ export function ProfilePage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [fullName, setFullName] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
   const { data: profile } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const res = await fetch("/api/dashboard/settings?type=profile");
+      const res = await fetch("/api/dashboard/profile");
       if (!res.ok) return null;
       return res.json();
     },
@@ -29,7 +30,7 @@ export function ProfilePage() {
 
   const saveProfile = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/dashboard/settings?type=profile", {
+      const res = await fetch("/api/dashboard/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ full_name: fullName }),
@@ -44,6 +45,10 @@ export function ProfilePage() {
   });
 
   const changePassword = async () => {
+    if (!currentPassword) {
+      toast({ variant: "error", title: "Informe a senha atual" });
+      return;
+    }
     if (!newPassword || newPassword.length < 6) {
       toast({ variant: "error", title: "Senha deve ter pelo menos 6 caracteres" });
       return;
@@ -51,12 +56,13 @@ export function ProfilePage() {
     const res = await fetch("/api/dashboard/profile/password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: newPassword }),
+      body: JSON.stringify({ currentPassword, password: newPassword }),
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({}));
       toast({ variant: "error", title: data.error ?? "Erro ao alterar senha" });
     } else {
+      setCurrentPassword("");
       setNewPassword("");
       toast({ variant: "success", title: "Senha alterada com sucesso" });
     }
@@ -88,12 +94,22 @@ export function ProfilePage() {
 
         <div className="border-logos-border border-t pt-6">
           <h3 className="text-logos-text mb-3 font-semibold">Alterar senha</h3>
-          <Input
-            type="password"
-            placeholder="Nova senha"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
+          <div className="space-y-3">
+            <Input
+              type="password"
+              placeholder="Senha atual"
+              autoComplete="current-password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+            <Input
+              type="password"
+              placeholder="Nova senha"
+              autoComplete="new-password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
           <Button className="mt-3" variant="outline" onClick={changePassword}>
             Atualizar senha
           </Button>

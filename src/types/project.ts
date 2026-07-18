@@ -1,10 +1,19 @@
+export const PROJECT_STATUSES = [
+  "Em andamento",
+  "Pausado",
+  "Concluído",
+  "Cancelado",
+] as const;
+
+export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
+
 export type Project = {
   id: string;
   client_id: string | null;
   lead_id: string | null;
   name: string;
   description: string | null;
-  status: string;
+  status: ProjectStatus;
   budget: number | null;
   started_at: string | null;
   completed_at: string | null;

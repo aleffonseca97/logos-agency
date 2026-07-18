@@ -8,6 +8,7 @@ import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/logos/button";
 import { Input } from "@/components/logos/input";
 import { useToast } from "@/components/logos/toast";
+import { getSafeRedirect } from "@/lib/safe-redirect";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
@@ -32,7 +33,7 @@ export function LoginForm() {
       return;
     }
 
-    const redirect = searchParams.get("redirect") ?? "/dashboard";
+    const redirect = getSafeRedirect(searchParams.get("redirect"));
     window.location.assign(redirect);
   };
 

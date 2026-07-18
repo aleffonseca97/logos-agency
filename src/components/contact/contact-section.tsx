@@ -26,7 +26,7 @@ export function ContactSection({ whatsappNumber }: { whatsappNumber: string }) {
   return (
     <SectionShell
       id={CONTACT_SECTION_ID}
-      spacing="lg"
+      spacing="xl"
       effects={
         <>
           <AnimatedGradient intensity="subtle" />

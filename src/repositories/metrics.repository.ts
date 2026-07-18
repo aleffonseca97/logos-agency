@@ -1,7 +1,6 @@
-import { ilike, or } from "drizzle-orm";
-
 import { getDb } from "@/lib/db";
-import { clients, leads, projects, proposals } from "@/lib/db/schema";
+import { leads } from "@/lib/db/schema";
+import { LEAD_STATUS } from "@/types/lead";
 
 export type DashboardMetrics = {
   totalLeads: number;
@@ -51,15 +50,18 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
   const newLeads = all.filter(
-    (l) => new Date(l.created_at) >= thirtyDaysAgo && l.status === "Novo",
+    (l) => new Date(l.created_at) >= thirtyDaysAgo && l.status === LEAD_STATUS.NOVO,
   ).length;
 
-  const closed = all.filter((l) => l.status === "Fechado").length;
+  const closed = all.filter((l) => l.status === LEAD_STATUS.FECHADO).length;
   const total = all.length;
   const conversionRate = total > 0 ? Math.round((closed / total) * 100) : 0;
 
   const estimatedRevenue = all
-    .filter((l) => l.status === "Fechado" || l.status === "Negociação")
+    .filter(
+      (l) =>
+        l.status === LEAD_STATUS.FECHADO || l.status === LEAD_STATUS.NEGOCIACAO,
+    )
     .reduce((sum, l) => sum + (l.estimated_value ?? parseBudget(l.budget)), 0);
 
   const monthMap = new Map<string, number>();
@@ -132,74 +134,4 @@ function parseBudget(budget: string): number {
   if (budget.includes("5.000–10.000") || budget.includes("5.000-10.000")) return 7500;
   if (budget.includes("Até")) return 5000;
   return 0;
-}
-
-export async function globalSearch(query: string) {
-  const db = getDb();
-  const term = `%${query}%`;
-
-  const [leadRows, clientRows, projectRows, proposalRows] = await Promise.all([
-    db
-      .select({
-        id: leads.id,
-        name: leads.name,
-        company: leads.company,
-        email: leads.email,
-        status: leads.status,
-      })
-      .from(leads)
-      .where(
-        or(
-          ilike(leads.name, term),
-          ilike(leads.company, term),
-          ilike(leads.email, term),
-        ),
-      )
-      .limit(5),
-    db
-      .select({
-        id: clients.id,
-        company: clients.company,
-        city: clients.city,
-        segment: clients.segment,
-        status: clients.status,
-      })
-      .from(clients)
-      .where(
-        or(
-          ilike(clients.company, term),
-          ilike(clients.city, term),
-          ilike(clients.segment, term),
-          ilike(clients.website, term),
-          ilike(clients.name, term),
-          ilike(clients.email, term),
-        ),
-      )
-      .limit(5),
-    db
-      .select({ id: projects.id, name: projects.name, status: projects.status })
-      .from(projects)
-      .where(ilike(projects.name, term))
-      .limit(5),
-    db
-      .select({
-        id: proposals.id,
-        title: proposals.title,
-        status: proposals.status,
-        value: proposals.value,
-      })
-      .from(proposals)
-      .where(ilike(proposals.title, term))
-      .limit(5),
-  ]);
-
-  return {
-    leads: leadRows,
-    clients: clientRows,
-    projects: projectRows,
-    proposals: proposalRows.map((p) => ({
-      ...p,
-      value: Number(p.value),
-    })),
-  };
 }

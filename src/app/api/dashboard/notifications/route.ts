@@ -1,12 +1,16 @@
-import { NextResponse } from "next/server";
-
 import { requireAuth } from "@/lib/auth";
+import {
+  handleRouteError,
+  jsonOk,
+  parseJsonBody,
+} from "@/lib/api/http";
 import {
   countUnreadNotifications,
   findNotifications,
   markAllNotificationsRead,
   markNotificationRead,
 } from "@/repositories/notifications.repository";
+import { notificationsPatchSchema } from "@/lib/validators/dashboard";
 
 export async function GET() {
   const { user, error } = await requireAuth();
@@ -18,10 +22,13 @@ export async function GET() {
       countUnreadNotifications(user!.id),
     ]);
 
-    return NextResponse.json({ notifications, unreadCount });
+    return jsonOk({ notifications, unreadCount });
   } catch (e) {
-    console.error("[api/dashboard/notifications]", e);
-    return NextResponse.json({ error: "Erro ao carregar notificações." }, { status: 500 });
+    return handleRouteError(
+      "[api/dashboard/notifications]",
+      e,
+      "Erro ao carregar notificações.",
+    );
   }
 }
 
@@ -29,19 +36,23 @@ export async function PATCH(request: Request) {
   const { user, error } = await requireAuth();
   if (error) return error;
 
-  const body = await request.json();
+  const parsed = await parseJsonBody(request, notificationsPatchSchema);
+  if ("response" in parsed) return parsed.response;
 
   try {
-    if (body.markAll) {
+    if (parsed.data.markAll) {
       await markAllNotificationsRead(user!.id);
-    } else if (body.id) {
-      await markNotificationRead(body.id, user!.id);
+    } else if (parsed.data.id) {
+      await markNotificationRead(parsed.data.id, user!.id);
     }
 
     const unreadCount = await countUnreadNotifications(user!.id);
-    return NextResponse.json({ success: true, unreadCount });
+    return jsonOk({ success: true, unreadCount });
   } catch (e) {
-    console.error("[api/dashboard/notifications PATCH]", e);
-    return NextResponse.json({ error: "Erro ao atualizar notificações." }, { status: 500 });
+    return handleRouteError(
+      "[api/dashboard/notifications PATCH]",
+      e,
+      "Erro ao atualizar notificações.",
+    );
   }
 }

@@ -1,6 +1,9 @@
-import { NextResponse } from "next/server";
-
-import { requireAuth } from "@/lib/auth";
+import { requireRole } from "@/lib/auth";
+import {
+  handleRouteError,
+  jsonCreated,
+  jsonError,
+} from "@/lib/api/http";
 import { convertLeadToClient } from "@/repositories/clients.repository";
 import { findLeadById, updateLead } from "@/repositories/leads.repository";
 import { LEAD_STATUS } from "@/types/lead";
@@ -8,7 +11,7 @@ import { LEAD_STATUS } from "@/types/lead";
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function POST(_request: Request, context: RouteContext) {
-  const { user, error } = await requireAuth();
+  const { user, error } = await requireRole("admin");
   if (error) return error;
 
   const { id } = await context.params;
@@ -16,7 +19,7 @@ export async function POST(_request: Request, context: RouteContext) {
   try {
     const lead = await findLeadById(id);
     if (!lead) {
-      return NextResponse.json({ error: "Lead não encontrado." }, { status: 404 });
+      return jsonError("Lead não encontrado.", 404);
     }
 
     const client = await convertLeadToClient({
@@ -31,9 +34,12 @@ export async function POST(_request: Request, context: RouteContext) {
 
     await updateLead(id, { status: LEAD_STATUS.FECHADO });
 
-    return NextResponse.json(client);
+    return jsonCreated(client);
   } catch (e) {
-    console.error("[api/dashboard/leads/[id]/convert]", e);
-    return NextResponse.json({ error: "Erro ao converter lead." }, { status: 500 });
+    return handleRouteError(
+      "[api/dashboard/leads/[id]/convert]",
+      e,
+      "Erro ao converter lead.",
+    );
   }
 }

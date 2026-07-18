@@ -2,12 +2,13 @@
 
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { ContactScrollButton } from "@/components/contact";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { Logo } from "@/components/ui/Logo";
 import { siteCta, siteNav } from "@/config/navigation";
+import { useActiveSection, useScrolled } from "@/hooks/use-section-nav";
 import {
   Drawer,
   DrawerClose,
@@ -27,15 +28,22 @@ import {
   NavbarNav,
 } from "@/components/logos/navbar";
 import { Link } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
 
 const mobileMenuId = "site-mobile-menu";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
   const [open, setOpen] = useState(false);
+  const scrolled = useScrolled(24);
+  const sectionIds = useMemo(
+    () => siteNav.map((item) => item.href.replace("#", "")),
+    [],
+  );
+  const activeSection = useActiveSection(sectionIds);
 
   return (
-    <Navbar variant="floating">
+    <Navbar variant="floating" data-scrolled={scrolled ? "true" : "false"}>
       <NavbarInner>
         <NavbarBrand className="min-w-0 shrink-0">
           <Link
@@ -49,11 +57,19 @@ export function SiteHeader() {
 
         <div className="flex min-w-0 items-center gap-1 sm:gap-2 lg:gap-4">
           <NavbarNav aria-label={t("mainNav")}>
-            {siteNav.map((item) => (
-              <NavbarItem key={item.href}>
-                <NavbarLink href={item.href}>{t(item.labelKey)}</NavbarLink>
-              </NavbarItem>
-            ))}
+            {siteNav.map((item) => {
+              const sectionId = item.href.replace("#", "");
+              return (
+                <NavbarItem key={item.href}>
+                  <NavbarLink
+                    href={item.href}
+                    active={activeSection === sectionId}
+                  >
+                    {t(item.labelKey)}
+                  </NavbarLink>
+                </NavbarItem>
+              );
+            })}
           </NavbarNav>
 
           <NavbarActions>
@@ -91,16 +107,26 @@ export function SiteHeader() {
                   aria-label={t("mobileNav")}
                   className="flex flex-col gap-0.5 px-4 pb-6"
                 >
-                  {siteNav.map((item) => (
-                    <DrawerClose key={item.href} asChild>
-                      <Link
-                        href={item.href}
-                        className="text-logos-text-muted hover:bg-logos-surface/60 hover:text-logos-text rounded-lg px-3 py-3 text-base font-medium transition-colors"
-                      >
-                        {t(item.labelKey)}
-                      </Link>
-                    </DrawerClose>
-                  ))}
+                  {siteNav.map((item) => {
+                    const sectionId = item.href.replace("#", "");
+                    const isActive = activeSection === sectionId;
+                    return (
+                      <DrawerClose key={item.href} asChild>
+                        <Link
+                          href={item.href}
+                          aria-current={isActive ? "page" : undefined}
+                          className={cn(
+                            "rounded-lg px-3 py-3 text-base font-medium transition-colors",
+                            isActive
+                              ? "bg-logos-surface/60 text-logos-text"
+                              : "text-logos-text-muted hover:bg-logos-surface/60 hover:text-logos-text",
+                          )}
+                        >
+                          {t(item.labelKey)}
+                        </Link>
+                      </DrawerClose>
+                    );
+                  })}
                   <DrawerClose asChild>
                     <ContactScrollButton
                       variant="nav-cta"
